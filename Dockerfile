@@ -8,7 +8,8 @@ FROM ruby:2.6.2
 ## For questions, visit https:
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
-## Copy Gemfile
+#### Jekyll ####
+## Copy Gemfile ##
 ## This may differ based on gems and plugins used
 COPY Gemfile /tmp/
 
@@ -27,6 +28,16 @@ RUN apt-get update && \
     /usr/sbin/update-locale LANG=C.UTF-8 && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen
+
+#### MkDocs and theme-mkdocs-material ####
+## https://github.com/sbamin/theme-mkdocs-material/
+RUN apt-get update && \
+	apt-get install -y python3-pip && \
+	python3 -m pip install --upgrade pip && \
+	pip3 install singledispatch nltk mkdocs && \
+	pip3 install mkdocs-material && \
+	pip3 install markdown pygments fontawesome_markdown pymdown-extensions && \
+	pip3 install mkdocs-git-revision-date-plugin mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin
 
 # Set default locale
 ENV LC_ALL "C.UTF-8"
