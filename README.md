@@ -1,5 +1,7 @@
 ## sitebuilder
 
+Docker image: [sbamin/sitebuilder:1.2.1](https://hub.docker.com/r/sbamin/sitebuilder)
+
 Docker image to build static websites managed via either [jekyll](https://jekyllrb.com/) or [MkDocs](https://www.mkdocs.org) framework.
 
 For Jekyll, using jekyll 3.8.5, github-pages 201, and other gems. View [Gemfile](Gemfile) for required Gemfile under jekyll root dir, and [Gemfile.lock.bkup](Gemfile.lock.bkup) for specific versions of gems. Example sites using this framework are: [sbamin.com](https://sbamin.com) and [verhaaklab.com](https://verhaaklab.com).
@@ -35,10 +37,10 @@ rm -rf site && \
 mkdir -p site
 
 ## jekyll framework
-docker run -v "/scratch/sandbox/website_sourcecode:/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder:1.2.1 jekyll serve -c _config.yml -d site
+docker run -v "/scratch/sandbox/website_sourcecode:/web" --rm sbamin/sitebuilder:1.2.1 jekyll build -c _config.yml -d site
 
 ## mkdocs framework
-docker run -v "/scratch/sandbox/website_sourcecode:/web" --rm -P -p 127.0.0.1:8000:8000 sbamin/sitebuilder:1.2.1 mkdocs build --clean -d site
+docker run -v "/scratch/sandbox/website_sourcecode:/web" --rm sbamin/sitebuilder:1.2.1 mkdocs build --clean -d site
 ```
 
 END
