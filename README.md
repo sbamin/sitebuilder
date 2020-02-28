@@ -18,10 +18,10 @@ MkDocs framework in the docker image is optimized for a [variant of mkdocs-mater
 cd /scratch/sandbox
 git clone <website_sourcecode>
 
-## jekyll framework
-docker run -v "/scratch/sandbox/website_sourcecode:/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder:1.2.1 jekyll serve -c _devconfig.yml -d _sitelocal
+## jekyll framework at http://127.0.0.1:4000
+docker run -v "/scratch/sandbox/website_sourcecode:/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder:1.2.1 jekyll serve --watch --host=0.0.0.0 -c _devconfig.yml -d _sitelocal
 
-## mkdocs framework
+## mkdocs framework at http://127.0.0.1:8000
 docker run -v "/scratch/sandbox/website_sourcecode:/web" --rm -P -p 127.0.0.1:8000:8000 sbamin/sitebuilder:1.2.1 mkdocs -q serve -a 0.0.0.0:8000
 ```
 
