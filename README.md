@@ -33,7 +33,7 @@ docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder:1.
 
 ```sh
 ## mkdocs
-docker run -v "$(pwd):/web" --rm sbamin/sitebuilder:1.3.0 mkdocs build --clean --destination site
+docker run -v "$(pwd):/web" --rm sbamin/sitebuilder:1.3.0 mkdocs build --clean --site-dir site
 
 ## jekyll
 docker run -v "$(pwd):/web" --rm sbamin/sitebuilder:1.3.0 jekyll build -c _config.yml --destination site
