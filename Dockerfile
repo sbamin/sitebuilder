@@ -8,8 +8,8 @@ FROM ruby:2.7.3
 ## For questions, visit https:
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
-LABEL version="1.3.0" \
-	mode="sitebuilder-1.3.0" \
+LABEL version="1.4.0" \
+	mode="sitebuilder-1.4.0" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -50,17 +50,17 @@ RUN	apt-get update && \
 	apt-get install -y python3-pip git && \
 	python3 -m pip install --upgrade pip && \
 	pip3 install --upgrade singledispatch nltk six && \
-	pip3 install mkdocs mkdocs-material && \
 	## force update packages if failed earlier
 	pip3 install --upgrade singledispatch nltk six && \
 	pip3 install markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install mkdocs-git-revision-date-plugin mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin && \
+	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin pymdown-extensions mkdocs-macros-plugin mike && \
 	## force update mkdocs env
-	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin && \
+	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
+	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin pymdown-extensions mkdocs-macros-plugin mike && \
 	## install latest hugo extended
-	wget https://github.com/gohugoio/hugo/releases/latest/download/hugo_extended_0.88.1_Linux-64bit.deb && \
-	apt install ./hugo_extended_0.88.1_Linux-64bit.deb -y && \
-	rm hugo_extended_0.88.1_Linux-64bit.deb && \
+	wget https://github.com/gohugoio/hugo/releases/download/v0.92.0/hugo_extended_0.92.0_Linux-64bit.deb && \
+	apt install ./hugo_extended_0.92.0_Linux-64bit.deb -y && \
+	rm hugo_extended_0.92.0_Linux-64bit.deb && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
