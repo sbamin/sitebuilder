@@ -18,13 +18,13 @@ For MkDocs, docker image is using [mkdocs-material](https://squidfunk.github.io/
 ## First go to root directory containing respective website repository.
 
 ## mkdocs
-docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder:1.3.0 mkdocs serve -a 0.0.0.0:8000
+docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder mkdocs serve -a 0.0.0.0:8000
 
 ## jekyll
-docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder:1.3.0 jekyll serve --watch --host=0.0.0.0 -c _devconfig.yml -d _sitelocal
+docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder jekyll serve --watch --host=0.0.0.0 -c _devconfig.yml -d _sitelocal
 
 ## hugo
-docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder:1.3.0 hugo server --bind 0.0.0.0 --port 8000
+docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder hugo server --bind 0.0.0.0 --port 8000
 ```
 
 ### Build local
@@ -33,13 +33,13 @@ docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder:1.
 
 ```sh
 ## mkdocs
-docker run -v "$(pwd):/web" --rm sbamin/sitebuilder:1.3.0 mkdocs build --clean --site-dir site
+docker run -v "$(pwd):/web" --rm sbamin/sitebuilder mkdocs build --clean --site-dir site
 
 ## jekyll
-docker run -v "$(pwd):/web" --rm sbamin/sitebuilder:1.3.0 jekyll build -c _config.yml --destination site
+docker run -v "$(pwd):/web" --rm sbamin/sitebuilder jekyll build -c _config.yml --destination site
 
 ## hugo
-docker run -v "$(pwd):/web" sbamin/sitebuilder:1.3.0 hugo --cleanDestinationDir --destination site
+docker run -v "$(pwd):/web" sbamin/sitebuilder hugo --cleanDestinationDir --destination site
 ```
 
 END
