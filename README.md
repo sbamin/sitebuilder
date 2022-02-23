@@ -1,6 +1,6 @@
 ## sitebuilder
 
-Docker image: [sbamin/sitebuilder:1.3.0](https://hub.docker.com/r/sbamin/sitebuilder)
+Docker image: [sbamin/sitebuilder](https://hub.docker.com/r/sbamin/sitebuilder)
 
 Docker image to build static websites managed via [Jekyll](https://jekyllrb.com), Hugo(https://gohugo.io) or [MkDocs](https://www.mkdocs.org) framework.
 
