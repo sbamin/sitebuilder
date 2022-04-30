@@ -94,7 +94,7 @@ docker tag foo/sitebuilder:1.4.2  ghcr.io/foo/sitebuilder:latest
 
 *   Confirm using `docker images` that IMAGE ID of a built image, `foo/sitebuilder:1.4.2` matches with aliases created above.
 
-*   Push images to docker hub and/or github packages.
+*   Push images to docker hub and/or github packages. For github container registry, see [this guide](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) on authentication.
 
 ```sh
 docker push foo/sitebuilder:1.4.2
