@@ -8,5 +8,5 @@ group :sitebuilder do
 	gem 'jekyll-mentions', '>= 1.6.0'
 	gem 'jekyll-twitter-plugin'
 	gem 'ffi', '>= 1.11.1'
-	gem 'nokogiri', '>= 1.13.4'
+	gem 'nokogiri', '>= 1.13.6', '< 2.0'
 end
