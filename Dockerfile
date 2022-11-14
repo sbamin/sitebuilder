@@ -3,13 +3,13 @@
 ############################################################
 ## ruby version should be compliant with netlify and github-pages
 ## managed build nodes, https://pages.github.com/versions/
-FROM ruby:2.7.3
+FROM ruby:2.7.6
 
 ## For questions, visit https:
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
-LABEL version="1.4.4" \
-	mode="sitebuilder-1.4.4" \
+LABEL version="1.4.5" \
+	mode="sitebuilder-1.4.5" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -46,7 +46,9 @@ RUN mkdir -p /scratch && \
 
 #### Hugo, MkDocs, and theme-mkdocs-material ####
 ## https://github.com/squidfunk/mkdocs-material
-RUN	apt-get update && \
+## issue with Hash Sum mismatch
+RUN	rm -rf /var/lib/apt/lists/partial && \
+	apt-get update -o Acquire::CompressionTypes::Order::=gz && \
 	apt-get install -y python3-pip git && \
 	python3 -m pip install --upgrade pip && \
 	pip3 install --upgrade singledispatch nltk six && \
@@ -56,11 +58,12 @@ RUN	apt-get update && \
 	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike && \
 	## force update mkdocs env
 	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike && \
-	## install latest hugo extended
-	wget https://github.com/gohugoio/hugo/releases/download/v0.101.0/hugo_extended_0.101.0_Linux-64bit.deb && \
-	apt install ./hugo_extended_0.101.0_Linux-64bit.deb -y && \
-	rm hugo_extended_0.101.0_Linux-64bit.deb && \
+	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike
+
+## install latest hugo extended
+RUN	wget https://github.com/gohugoio/hugo/releases/download/v0.105.0/hugo_extended_0.105.0_linux-amd64.deb && \
+	apt install ./hugo_extended_0.105.0_linux-amd64.deb -y && \
+	rm hugo_extended_0.105.0_linux-amd64.deb && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
