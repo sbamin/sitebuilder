@@ -8,8 +8,8 @@ FROM ruby:2.7.6
 ## For questions, visit https:
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
-LABEL version="1.4.5" \
-	mode="sitebuilder-1.4.5" \
+LABEL version="1.4.6" \
+	mode="sitebuilder-1.4.6" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -61,9 +61,9 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike
 
 ## install latest hugo extended
-RUN	wget https://github.com/gohugoio/hugo/releases/download/v0.105.0/hugo_extended_0.105.0_linux-amd64.deb && \
-	apt install ./hugo_extended_0.105.0_linux-amd64.deb -y && \
-	rm hugo_extended_0.105.0_linux-amd64.deb && \
+RUN	wget https://github.com/gohugoio/hugo/releases/download/v0.110.0/hugo_extended_0.110.0_linux-amd64.deb && \
+	apt install ./hugo_extended_0.110.0_linux-amd64.deb -y && \
+	rm hugo_extended_0.110.0_linux-amd64.deb && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
