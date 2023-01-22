@@ -64,14 +64,22 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 RUN	wget https://github.com/gohugoio/hugo/releases/download/v0.110.0/hugo_extended_0.110.0_linux-amd64.deb && \
 	apt install ./hugo_extended_0.110.0_linux-amd64.deb -y && \
 	rm hugo_extended_0.110.0_linux-amd64.deb && \
+	wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && \
+	tar -C /usr/local -xvzf go1.19.5.linux-amd64.tar.gz && \
+	mkdir -p /opt/go/bin && \
+	chmod 775 /opt/go && \
+	chmod 775 /opt/go/bin && \
+	apt-get install -y git && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
+
+ENV GOPATH="/opt/go"
 
 ## empty dir where user volume should be mounted
 ## to run jekyll related commands
 WORKDIR /web
 
-ENV PATH /usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH /usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 #### expose ports for jekyll, mkdocs, and hugo serve command ####
 EXPOSE 4000

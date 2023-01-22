@@ -8,23 +8,23 @@ For Jekyll framework, your site's Gemfile should match version requirements give
 
 For MkDocs, docker image is using [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) theme developed by [Martin Donath](https://github.com/squidfunk).
 
+**NOTE:** docker image with a `latest` tag may have breaking changes and may not work with one or more of static site engines if your code is not compatible with the latest version. Please check [Release page](https://github.com/sbamin/sitebuilder/releases) for breaking changes, if any. If so, you may try using previous version of a docker image.
+
 ### Serve local for testing
 
->PS: Only for testing purpose. Container by default will expose ports 4000, 8000, and 1313. Depending on firewall settings in the host machine, this may expose website contents to intranet or public at the exposed port(s).  
-
->Access website at **127.0.0.1:4000** 
+>WARN: Only for testing purpose. Container by default will expose ports 4000, 8000, and 1313. Depending on firewall settings in the host machine, this may expose website contents to intranet or public at the exposed port(s). Make sure that firewall is secure enough and stop server immediately after testing.
 
 ```sh
 ## First go to root directory containing respective website repository.
 
-## mkdocs
-docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder mkdocs serve -a 0.0.0.0:8000
+## mkdocs, preview at http://0.0.0.0:4000
+docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder mkdocs serve -a 0.0.0.0:4000
 
-## jekyll
+## jekyll, preview at http://0.0.0.0:4000
 docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder jekyll serve --watch --host=0.0.0.0 -c _devconfig.yml -d _sitelocal
 
-## hugo
-docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:8000 sbamin/sitebuilder hugo server --bind 0.0.0.0 --port 8000
+## hugo, preview at http://0.0.0.0:4000
+docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder hugo server --bind 0.0.0.0 --port 4000
 ```
 
 ### Build local
@@ -40,6 +40,14 @@ docker run -v "$(pwd):/web" --rm sbamin/sitebuilder jekyll build -c _config.yml 
 
 ## hugo
 docker run -v "$(pwd):/web" sbamin/sitebuilder hugo --cleanDestinationDir --destination site
+```
+
+### Get singularity SIF image
+
+If you prefer using [singularity](https://docs.sylabs.io/guides/3.5/user-guide/singularity_and_docker.html) SIF image, run following command to get an updated SIF image.
+
+```sh
+singularity run docker://sbamin/sitebuilder:latest
 ```
 
 END
