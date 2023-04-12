@@ -8,8 +8,8 @@ FROM ruby:2.7.6
 ## For questions, visit https:
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
-LABEL version="1.4.6" \
-	mode="sitebuilder-1.4.6" \
+LABEL version="1.5.1" \
+	mode="sitebuilder-1.5.1" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -55,15 +55,15 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 	## force update packages if failed earlier
 	pip3 install --upgrade singledispatch nltk six && \
 	pip3 install markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike && \
+	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin && \
 	## force update mkdocs env
 	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike
+	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin
 
 ## install latest hugo extended
-RUN	wget https://github.com/gohugoio/hugo/releases/download/v0.110.0/hugo_extended_0.110.0_linux-amd64.deb && \
-	apt install ./hugo_extended_0.110.0_linux-amd64.deb -y && \
-	rm hugo_extended_0.110.0_linux-amd64.deb && \
+RUN	wget https://github.com/gohugoio/hugo/releases/download/v0.111.3/hugo_extended_0.111.3_linux-amd64.deb && \
+	apt install ./hugo_extended_0.111.3_linux-amd64.deb -y && \
+	rm hugo_extended_0.111.3_linux-amd64.deb && \
 	wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && \
 	tar -C /usr/local -xvzf go1.19.5.linux-amd64.tar.gz && \
 	mkdir -p /opt/go/bin && \

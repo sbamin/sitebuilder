@@ -15,9 +15,9 @@ git status
 
 >status should be up-to-date and point to `main` git branch.
 
-*   Define docker image tag, e.g., `1.5.0` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
+*   Define docker image tag, e.g., `1.5.1` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
 
-*   Update `Dockerfile` as per your custom changes. At minimum, update LABEL version and mode to reflect an updated tag. You can also update `hugo extended` to the [current release](https://github.com/gohugoio/hugo/releases) by updating respective occurrences of `hugo_extended_0.105.0_linux-arm64.deb` in `Dockerfile`.
+*   Update `Dockerfile` as per your custom changes. At minimum, update LABEL version and mode to reflect an updated tag. You can also update `hugo extended` to the [current release](https://github.com/gohugoio/hugo/releases) by updating respective occurrences of `hugo_extended_0.111.3_linux-amd64.deb` in `Dockerfile`.
 
 *   If you need to update [jekyll](https://jekyllrb.com/) related gems, update `Gemfile` while ensuring gem [version requirements](https://pages.github.com/versions/) for [github-pages](https://github.com/github/pages-gem) gem.
 
@@ -26,7 +26,7 @@ git status
 *   Start building a docker image. You need to replace `foo/sitebuilder` with your respective [docker hub user id](https://hub.docker.com) and image name you like to rename. Read [manpage for docker build](https://docs.docker.com/engine/reference/commandline/build/).
 
 ```sh
-docker build -t foo/sitebuilder:1.5.0 .
+docker build -t foo/sitebuilder:1.5.1 .
 ```
 
 *   Once image is successfully built, copy `Gemfile.lock` back to host, so that we can update it with the most recent versions of gems.
@@ -34,7 +34,7 @@ docker build -t foo/sitebuilder:1.5.0 .
 ```sh
 ## start container in an interactive session and mount local (host) directory
 ## to an empty location in the docker container.
-docker run --rm -it -v "$(pwd)":/hostspace foo/sitebuilder:1.5.0 /bin/bash
+docker run --rm -it -v "$(pwd)":/hostspace foo/sitebuilder:1.5.1 /bin/bash
 
 ## copy (overwrite) local Gemfile.lock with an updated version from 
 ## the container
@@ -53,7 +53,7 @@ git status
 *   Check installed or updated package versions
 
 ```sh
-docker run --rm foo/sitebuilder:1.5.0 /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep mkdocs"
+docker run --rm foo/sitebuilder:1.5.1 /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep mkdocs"
 ```
 
 *   Commit and push those to github.
