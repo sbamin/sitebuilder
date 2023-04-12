@@ -1,0 +1,55 @@
+############################################################
+# Dockerfile for website build using jekyll, hugo, or mkdocs
+############################################################
+## Patched version from https://github.com/sbamin/sitebuilder/releases
+FROM sbamin/sitebuilder:1.5.0
+
+## For questions, visit https:
+MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
+
+LABEL version="1.5.0p1" \
+	mode="sitebuilder-1.5.0p1" \
+	description="docker image to build jekyll, hugo or mkdocs supported website. Patched to include git-authors plugin." \
+	website="https://github.com/sbamin/sitebuilder" \
+	issues="https://github.com/sbamin/sitebuilder/issues"
+
+## run apt-get non-interactive
+## https://stackoverflow.com/a/56569081/1243763
+ARG DEBIAN_FRONTEND=noninteractive
+
+#### Configure locales ####
+## https://github.com/jekyll/jekyll/issues/4268
+RUN apt-get update && \
+    apt-get install -y locales && \
+    dpkg-reconfigure --frontend noninteractive locales && \
+    locale-gen C.UTF-8 && \
+    /usr/sbin/update-locale LANG=C.UTF-8 && \
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
+
+## Set default locale
+ENV LC_ALL="C.UTF-8"
+ENV LANG="en_US.UTF-8"
+ENV LANGUAGE="en_US.UTF-8"
+
+## patch to include git-authors plugin
+RUN	python3 -m pip install --upgrade pip && \
+	pip3 install --upgrade mkdocs-git-authors-plugin
+
+ENV GOPATH="/opt/go"
+
+## empty dir where user volume should be mounted
+## to run jekyll related commands
+WORKDIR /web
+
+ENV PATH /usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+#### expose ports for jekyll, mkdocs, and hugo serve command ####
+EXPOSE 4000
+EXPOSE 8000
+EXPOSE 1313
+
+ENTRYPOINT []
+CMD []
+
+## END ##
