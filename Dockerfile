@@ -8,8 +8,9 @@ FROM ruby:2.7.6
 ## For questions, visit https:
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
-LABEL version="1.5.1" \
-	mode="sitebuilder-1.5.1" \
+## NOTE: installing beta version of mkdocs-material with blog support.
+LABEL version="1.5.2b1" \
+	mode="sitebuilder-1.5.2b1" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -32,6 +33,8 @@ RUN apt-get update && \
 ENV LC_ALL="C.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
+ENV myhugo="0.117.0"
+ENV mygo="1.21.0"
 
 #### Jekyll ####
 ## Copy Gemfile ##
@@ -55,22 +58,23 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 	## force update packages if failed earlier
 	pip3 install --upgrade singledispatch nltk six && \
 	pip3 install markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin && \
+	pip3 install mkdocs mkdocs-material==9.2.0b3 mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin && \
 	## force update mkdocs env
 	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin
+	pip3 install --upgrade mkdocs mkdocs-material==9.2.0b3 mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin
 
 ## install latest hugo extended
-RUN	wget https://github.com/gohugoio/hugo/releases/download/v0.111.3/hugo_extended_0.111.3_linux-amd64.deb && \
-	apt install ./hugo_extended_0.111.3_linux-amd64.deb -y && \
-	rm hugo_extended_0.111.3_linux-amd64.deb && \
-	wget https://go.dev/dl/go1.19.5.linux-amd64.tar.gz && \
-	tar -C /usr/local -xvzf go1.19.5.linux-amd64.tar.gz && \
+RUN	wget https://github.com/gohugoio/hugo/releases/download/v"${myhugo}"/hugo_extended_"${myhugo}"_linux-amd64.deb && \
+	apt install ./hugo_extended_"${myhugo}"_linux-amd64.deb -y && \
+	rm hugo_extended_"${myhugo}"_linux-amd64.deb && \
+	wget https://go.dev/dl/go"${mygo}".linux-amd64.tar.gz && \
+	tar -C /usr/local -xvzf go"${mygo}".linux-amd64.tar.gz && \
 	mkdir -p /opt/go/bin && \
 	chmod 775 /opt/go && \
 	chmod 775 /opt/go/bin && \
 	apt-get install -y git && \
 	apt-get clean && \
+	rm go"${mygo}".linux-amd64.tar.gz && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV GOPATH="/opt/go"
