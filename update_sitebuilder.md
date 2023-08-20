@@ -26,10 +26,19 @@ git status
 *   Start building a docker image. You need to replace `foo/sitebuilder` with your respective [docker hub user id](https://hub.docker.com) and image name you like to rename. Read [manpage for docker build](https://docs.docker.com/engine/reference/commandline/build/).
 
 ```sh
-docker build --platform linux/amd64 -t foo/sitebuilder:1.5.2b1 .
+## build amd64 version first
+docker build --platform linux/amd64 -f Dockerfile -t foo/sitebuilder:1.5.2b1_arm64 .
 ```
 
 >NOTE: If using docker on Mac M1/M2, you should add `--platform linux/amd64` given sitebuilder docker image is configured for amd64 and not arm64 architecture. To use arm64 architecture, you need to update `Dockerfile` to replace `amd64` packages with `arm64` ones, if available from a respective developer. [See relevant details here](https://stackoverflow.com/a/68004485/1243763).
+
+*	Optional: To build arm64 docker image, use a separate Dockerfile that installs arm64 packages of hugo and go.
+
+```sh
+docker build --platform linux/arm64 -f Dockerfile_arm64 -t foo/sitebuilder:1.5.2b1_arm64 .
+```
+
+PS: Rest of steps are implied for amd64 image, and can be followed for arm64 image too with applicable changes to docker image name.
 
 *   Once image is successfully built, copy `Gemfile.lock` back to host, so that we can update it with the most recent versions of gems.
 
