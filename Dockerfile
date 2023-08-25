@@ -9,8 +9,8 @@ FROM ruby:2.7.6
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
 ## NOTE: installing beta version of mkdocs-material with blog support.
-LABEL version="1.5.2b1" \
-	mode="sitebuilder-1.5.2b1" \
+LABEL version="1.5.3" \
+	mode="sitebuilder-1.5.3" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -58,10 +58,11 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 	## force update packages if failed earlier
 	pip3 install --upgrade singledispatch nltk six && \
 	pip3 install markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install mkdocs mkdocs-material==9.2.0b3 mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin && \
+	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin && \
 	## force update mkdocs env
 	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install --upgrade mkdocs mkdocs-material==9.2.0b3 mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin
+	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin && \
+	git config --global --add safe.directory /web
 
 ## install latest hugo extended
 RUN	wget https://github.com/gohugoio/hugo/releases/download/v"${myhugo}"/hugo_extended_"${myhugo}"_linux-amd64.deb && \
