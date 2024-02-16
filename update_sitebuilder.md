@@ -58,7 +58,9 @@ exit
 *   Check installed or updated package versions
 
 ```sh
-docker run --platform linux/amd64 --rm sbamin/sitebuilder:1.5.3 /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep mkdocs"
+docker run --platform linux/amd64 --rm sbamin/sitebuilder:1.5.4 /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep mkdocs"
+
+docker run --platform linux/arm64 --rm sbamin/sitebuilder:1.5.4_arm64 /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep mkdocs"
 ```
 
 *   Commit and push those to github.
@@ -70,20 +72,38 @@ git add Dockerfile Gemfile.lock update_sitebuilder.md
 ## -s requires a valid gpg key for signing a message
 git commit -s -F- <<EOF
 Updated sitebuilder
-v1.5.3 linux/amd64
+v1.5.4
 
-jekyll 3.9.3
-hugo v0.117.0-b2f0696cad918fb61420a6aff173eb36662b406e+extended linux/amd64 BuildDate=2023-08-07T12:49:48Z VendorInfo=gohugoio
+## amd64
+
+jekyll 3.9.5
+hugo v0.122.0-b9a03bd59d5f71a529acb3e33f995e0ef332b3aa+extended linux/amd64 BuildDate=2024-01-26T15:54:24Z VendorInfo=gohugoio
 git version 2.30.2
-go version go1.21.0 linux/amd64
-mkdocs                                    1.5.2
+go version go1.22.0 linux/amd64
+mkdocs                                    1.5.3
 mkdocs-git-authors-plugin                 0.7.2
-mkdocs-git-revision-date-localized-plugin 1.2.0
+mkdocs-git-revision-date-localized-plugin 1.2.4
 mkdocs-git-revision-date-plugin           0.3.2
-mkdocs-macros-plugin                      1.0.4
-mkdocs-material                           9.2.3
-mkdocs-material-extensions                1.1.1
-mkdocs-minify-plugin                      0.7.1
+mkdocs-macros-plugin                      1.0.5
+mkdocs-material                           9.5.9
+mkdocs-material-extensions                1.3.1
+mkdocs-minify-plugin                      0.8.0
+mkdocs-redirects                          1.2.1
+
+## arm64
+
+jekyll 3.9.5
+hugo v0.122.0-b9a03bd59d5f71a529acb3e33f995e0ef332b3aa+extended linux/arm64 BuildDate=2024-01-26T15:54:24Z VendorInfo=gohugoio
+git version 2.30.2
+go version go1.22.0 linux/arm64
+mkdocs                                    1.5.3
+mkdocs-git-authors-plugin                 0.7.2
+mkdocs-git-revision-date-localized-plugin 1.2.4
+mkdocs-git-revision-date-plugin           0.3.2
+mkdocs-macros-plugin                      1.0.5
+mkdocs-material                           9.5.9
+mkdocs-material-extensions                1.3.1
+mkdocs-minify-plugin                      0.8.0
 mkdocs-redirects                          1.2.1
 
 EOF
@@ -100,7 +120,7 @@ Upload your docker image to [docker hub](https://www.docker.com), [github packag
 ```sh
 ## unless beta version, remove older docker image tagged as latest, if any on local computer.
 docker rmi sbamin/sitebuilder:latest
-docker tag sbamin/sitebuilder:1.5.3 sbamin/sitebuilder:latest
+docker tag sbamin/sitebuilder:1.5.4 sbamin/sitebuilder:latest
 ```
 
 *   Besides updating Docker Hub, if you are updating image also to github packages, update respective aliases.
@@ -108,26 +128,27 @@ docker tag sbamin/sitebuilder:1.5.3 sbamin/sitebuilder:latest
 ```sh
 ## unless beta version, remove older versions
 docker rmi ghcr.io/sbamin/sitebuilder:latest
-docker rmi ghcr.io/sbamin/sitebuilder:latest
-docker tag sbamin/sitebuilder:1.5.3  ghcr.io/sbamin/sitebuilder:1.5.3
-docker tag sbamin/sitebuilder:1.5.3  ghcr.io/sbamin/sitebuilder:latest
+docker tag sbamin/sitebuilder:1.5.4  ghcr.io/sbamin/sitebuilder:1.5.4
+docker tag ghcr.io/sbamin/sitebuilder:1.5.4  ghcr.io/sbamin/sitebuilder:latest
 ```
 
-*   Confirm using `docker images` that IMAGE ID of a built image, `sbamin/sitebuilder:1.5.3` matches with aliases created above. If all good, remove previous version of sitebuilder, `docker rmi sbamin/sitebuilder:1.5.0`
+*   Confirm using `docker images` that IMAGE ID of a built image, `sbamin/sitebuilder:1.5.x` matches with aliases created above. If all good, remove previous version of sitebuilder, `docker rmi sbamin/sitebuilder:1.5.0`
 
 *   Before pushing images, worth doing a test build and preview run as per [README.md](README.md)
 
 *   Push images to docker hub and/or github packages. For github container registry, see [this guide](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) on authentication.
 
 ```sh
-docker push sbamin/sitebuilder:1.5.3
+docker push sbamin/sitebuilder:1.5.4
 docker push sbamin/sitebuilder:latest
+docker push sbamin/sitebuilder:1.5.4_arm64
 
 ## avoid echo raw password!
 ## echo $(<decrypt pwd>) | docker login ghcr.io -u USERNAME --password-stdin
 
-docker push ghcr.io/sbamin/sitebuilder:1.5.3
+docker push ghcr.io/sbamin/sitebuilder:1.5.4
 docker push ghcr.io/sbamin/sitebuilder:latest
+docker push ghcr.io/sbamin/sitebuilder:1.5.4_arm64
 ```
 
 ### Get singularity SIF image
@@ -138,7 +159,7 @@ If you prefer using [singularity](https://docs.sylabs.io/guides/3.5/user-guide/s
 ## assuming running on linux/amd64 architecture.
 singularity run docker://sbamin/sitebuilder:latest
 ## or beta version
-singularity run docker://sbamin/sitebuilder:1.5.3
+singularity run docker://sbamin/sitebuilder:1.5.4
 ```
 
 Done!
