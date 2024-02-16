@@ -15,7 +15,7 @@ git status
 
 >status should be up-to-date and point to `main` git branch.
 
-*   Define docker image tag, e.g., `1.5.3` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
+*   Define docker image tag, e.g., `1.5.4` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
 
 *   Update `Dockerfile` as per your custom changes. At minimum, update LABEL version and mode to reflect an updated tag. You can also update `hugo extended` to the [current release](https://github.com/gohugoio/hugo/releases) by updating *myhugo* ENV variable in `Dockerfile`. Optionally, [update related go version](https://go.dev/dl) with *mygo* ENV variable.
 
@@ -27,7 +27,7 @@ git status
 
 ```sh
 ## build amd64 version first
-docker build --platform linux/amd64 -f Dockerfile -t sbamin/sitebuilder:1.5.3 .
+docker build --platform linux/amd64 -f Dockerfile -t sbamin/sitebuilder:1.5.4 .
 ```
 
 >NOTE: If using docker on Mac M1/M2, you should add `--platform linux/amd64` given sitebuilder docker image is configured for amd64 and not arm64 architecture. To use arm64 architecture, you need to update `Dockerfile` to replace `amd64` packages with `arm64` ones, if available from a respective developer. [See relevant details here](https://stackoverflow.com/a/68004485/1243763).
@@ -35,7 +35,7 @@ docker build --platform linux/amd64 -f Dockerfile -t sbamin/sitebuilder:1.5.3 .
 *	Optional: To build arm64 docker image, use a separate Dockerfile that installs arm64 packages of hugo and go.
 
 ```sh
-docker build --platform linux/arm64 -f Dockerfile_arm64 -t sbamin/sitebuilder:1.5.3_arm64 .
+docker build --platform linux/arm64 -f Dockerfile_arm64 -t sbamin/sitebuilder:1.5.4_arm64 .
 ```
 
 PS: Rest of steps are implied for amd64 image, and can be followed for arm64 image too with applicable changes to docker image name.
@@ -45,7 +45,7 @@ PS: Rest of steps are implied for amd64 image, and can be followed for arm64 ima
 ```sh
 ## start container in an interactive session and mount local (host) directory
 ## to an empty location in the docker container.
-docker run --platform linux/amd64 --rm -it -v "$(pwd)":/hostspace sbamin/sitebuilder:1.5.3 /bin/bash
+docker run --platform linux/amd64 --rm -it -v "$(pwd)":/hostspace sbamin/sitebuilder:1.5.4 /bin/bash
 
 ## copy (overwrite) local Gemfile.lock with an updated version from 
 ## the container

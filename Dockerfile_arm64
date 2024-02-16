@@ -9,8 +9,8 @@ FROM ruby:2.7.6
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
 ## NOTE: installing beta version of mkdocs-material with blog support.
-LABEL version="1.5.2b1_arm64" \
-	mode="sitebuilder-1.5.2b1_arm64" \
+LABEL version="1.5.4_arm64" \
+	mode="sitebuilder-1.5.4_arm64" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -33,8 +33,8 @@ RUN apt-get update && \
 ENV LC_ALL="C.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
-ENV myhugo="0.117.0"
-ENV mygo="1.21.0"
+ENV myhugo="0.122.0"
+ENV mygo="1.22.0"
 
 #### Jekyll ####
 ## Copy Gemfile ##
