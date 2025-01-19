@@ -1,6 +1,10 @@
 ## sitebuilder
 
+![GitHub Tag](https://img.shields.io/github/v/tag/sbamin/sitebuilder?label=sbamin%2Fsitebuilder) | [![Docker Image Version](https://img.shields.io/docker/v/sbamin/sitebuilder?arch=amd64)](https://hub.docker.com/r/sbamin/sitebuilder)
+
 Docker image: [sbamin/sitebuilder](https://hub.docker.com/r/sbamin/sitebuilder)
+
+>NOTE: Since sitebuilder tag: 1.5.5, future updates will always be pushed to [docker hub](https://hub.docker.com/r/sbamin/sitebuilder) but occasionally to github repo.
 
 Docker image to build static websites managed via [Jekyll](https://jekyllrb.com), Hugo(https://gohugo.io) or [MkDocs](https://www.mkdocs.org) framework.
 
