@@ -9,8 +9,8 @@ FROM ruby:3.3.7
 MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
 
 ## NOTE: installing beta version of mkdocs-material with blog support.
-LABEL version="1.5.5_arm64" \
-	mode="sitebuilder-1.5.5_arm64" \
+LABEL version="1.5.6_arm64" \
+	mode="sitebuilder-1.5.6_arm64" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
@@ -35,8 +35,8 @@ RUN apt-get update && \
 ENV LC_ALL="C.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
-ENV myhugo="0.141.0"
-ENV mygo="1.23.5"
+ENV myhugo="0.144.2"
+ENV mygo="1.24.0"
 
 #### Python 3 venv ####
 # Create and activate a Python virtual environment
@@ -83,7 +83,7 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 ## install latest hugo extended
 RUN	wget https://github.com/gohugoio/hugo/releases/download/v"${myhugo}"/hugo_extended_"${myhugo}"_linux-arm64.deb && \
 	apt install ./hugo_extended_"${myhugo}"_linux-arm64.deb -y && \
-	rm hugo_extended_"${myhugo}"_linux-arm64.deb && \
+	rm -f hugo_extended_"${myhugo}"_linux-arm64.deb && \
 	wget https://go.dev/dl/go"${mygo}".linux-arm64.tar.gz && \
 	tar -C /usr/local -xvzf go"${mygo}".linux-arm64.tar.gz && \
 	mkdir -p /opt/go/bin && \
@@ -91,7 +91,7 @@ RUN	wget https://github.com/gohugoio/hugo/releases/download/v"${myhugo}"/hugo_ex
 	chmod 775 /opt/go/bin && \
 	apt-get install -y git && \
 	apt-get clean && \
-	rm go"${mygo}".linux-arm64.tar.gz && \
+	rm -f go"${mygo}".linux-arm64.tar.gz && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV GOPATH="/opt/go"
