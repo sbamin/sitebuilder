@@ -5,14 +5,16 @@
 ## managed build nodes, https://pages.github.com/versions/
 FROM ruby:3.3.7
 
-## For questions, visit https:
-MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
+## pull docker buildx platform arg
+ARG TARGETPLATFORM
 
 ## NOTE: installing beta version of mkdocs-material with blog support.
-LABEL version="1.5.6" \
-	mode="sitebuilder-1.5.6" \
+LABEL version="1.5.7" \
+	mode="sitebuilder-1.5.7" \
+	author="Samirkumar Amin; tweet:sbamin; sbamin.com/contact" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
+	LICENSE="MIT License, https://github.com/sbamin/sitebuilder/blob/master/LICENSE" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
 
 ## run apt-get non-interactive
@@ -35,8 +37,8 @@ RUN apt-get update && \
 ENV LC_ALL="C.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
-ENV myhugo="0.144.2"
-ENV mygo="1.24.0"
+ENV myhugo="0.145.0"
+ENV mygo="1.24.1"
 
 #### Python 3 venv ####
 # Create and activate a Python virtual environment
@@ -77,30 +79,39 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 	## force update mkdocs env
 	pip3 install --upgrade "mkdocs-material[imaging,recommended,git]" && \
 	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin mkdocs-glightbox && \
+	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin mkdocs-glightbox mkdocstrings mkdocstrings-python mkdocstrings-shell && \
 	git config --global --add safe.directory /web
 
-## install latest hugo extended
-RUN	wget https://github.com/gohugoio/hugo/releases/download/v"${myhugo}"/hugo_extended_"${myhugo}"_linux-amd64.deb && \
-	apt install ./hugo_extended_"${myhugo}"_linux-amd64.deb -y && \
-	rm -f hugo_extended_"${myhugo}"_linux-amd64.deb && \
-	wget https://go.dev/dl/go"${mygo}".linux-amd64.tar.gz && \
-	tar -C /usr/local -xvzf go"${mygo}".linux-amd64.tar.gz && \
+## install latest hugo extended, including GO
+## requires OS arch variable
+RUN case "$TARGETPLATFORM" in \
+        "linux/amd64") ARCH="amd64" ;; \
+        "linux/arm64") ARCH="arm64" ;; \
+        *) echo "Unsupported architecture: $TARGETPLATFORM" && exit 1 ;; \
+    esac && \
+    echo "Building for ARCH=$ARCH" && \
+	wget https://github.com/gohugoio/hugo/releases/download/v${myhugo}/hugo_extended_${myhugo}_linux-${ARCH}.deb && \
+	apt install ./hugo_extended_${myhugo}_linux-${ARCH}.deb -y && \
+	rm -f hugo_extended_${myhugo}_linux-${ARCH}.deb && \
+	wget https://go.dev/dl/go${mygo}.linux-${ARCH}.tar.gz && \
+	tar -C /usr/local -xvzf go${mygo}.linux-${ARCH}.tar.gz && \
 	mkdir -p /opt/go/bin && \
 	chmod 775 /opt/go && \
 	chmod 775 /opt/go/bin && \
-	apt-get install -y git && \
 	apt-get clean && \
-	rm -f go"${mygo}".linux-amd64.tar.gz && \
+	rm -f go${mygo}.linux-${ARCH}.tar.gz && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV GOPATH="/opt/go"
 
 ## empty dir where user volume should be mounted
-## to run jekyll related commands
+## to run jekyll/mkdocs/hugo related commands
 WORKDIR /web
 
-ENV PATH /opt/venv/bin:/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+## for mkdocstrings, set an intended path to python modules
+ENV PYTHONPATH="/web/api/py"
+
+ENV PATH="/opt/venv/bin:/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 #### expose ports for jekyll, mkdocs, and hugo serve command ####
 EXPOSE 4000
