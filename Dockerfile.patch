@@ -2,14 +2,17 @@
 # Dockerfile for website build using jekyll, hugo, or mkdocs
 ############################################################
 ## Patched version from https://github.com/sbamin/sitebuilder/releases
-FROM sbamin/sitebuilder:1.5.0
+## depending on patches, can be used for both, amd64 and arm64
+
+FROM sbamin/sitebuilder:1.5.6
 
 ## For questions, visit https:
-MAINTAINER "Samir B. Amin" <tweet:sbamin; sbamin.com/contact>
+MAINTAINER "Samirkumar Amin" <tweet:sbamin; sbamin.com/contact>
 
-LABEL version="1.5.0p1" \
-	mode="sitebuilder-1.5.0p1" \
-	description="docker image to build jekyll, hugo or mkdocs supported website. Patched to include git-authors plugin." \
+## NOTE: installing beta version of mkdocs-material with blog support.
+LABEL version="1.5.6p2" \
+	mode="sitebuilder-1.5.6p2" \
+	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	issues="https://github.com/sbamin/sitebuilder/issues"
 
@@ -17,24 +20,15 @@ LABEL version="1.5.0p1" \
 ## https://stackoverflow.com/a/56569081/1243763
 ARG DEBIAN_FRONTEND=noninteractive
 
-#### Configure locales ####
-## https://github.com/jekyll/jekyll/issues/4268
-RUN apt-get update && \
-    apt-get install -y locales && \
-    dpkg-reconfigure --frontend noninteractive locales && \
-    locale-gen C.UTF-8 && \
-    /usr/sbin/update-locale LANG=C.UTF-8 && \
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
-    locale-gen
+#### Python 3 venv at /opt/venv/bin ####
+ENV PATH="/opt/venv/bin:$PATH"
 
-## Set default locale
-ENV LC_ALL="C.UTF-8"
-ENV LANG="en_US.UTF-8"
-ENV LANGUAGE="en_US.UTF-8"
-
-## patch to include git-authors plugin
-RUN	python3 -m pip install --upgrade pip && \
-	pip3 install --upgrade mkdocs-git-authors-plugin
+## patch commands
+RUN pip3 install --upgrade pip && \
+	pip3 install --upgrade "mkdocs-material[imaging,recommended,git]" && \
+	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
+	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin mkdocs-glightbox && \
+	pip3 install --upgrade mkdocstrings mkdocstrings-python mkdocstrings-shell
 
 ENV GOPATH="/opt/go"
 
@@ -42,7 +36,7 @@ ENV GOPATH="/opt/go"
 ## to run jekyll related commands
 WORKDIR /web
 
-ENV PATH /usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH /opt/venv/bin:/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 #### expose ports for jekyll, mkdocs, and hugo serve command ####
 EXPOSE 4000
@@ -53,3 +47,4 @@ ENTRYPOINT []
 CMD []
 
 ## END ##
+
