@@ -17,9 +17,9 @@ git status
 
 ### Update packages
 
-*   Define docker image tag, e.g., `1.5.6` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
+*   Define docker image tag, e.g., `1.5.8` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
 
-*   Update `Dockerfile` as per your custom changes. At minimum, update LABEL version and mode to reflect an updated tag. You can also update `hugo extended` to the [current release](https://github.com/gohugoio/hugo/releases) by updating *myhugo* ENV variable in `Dockerfile`. Optionally, [update related go version](https://go.dev/dl/) with *mygo* ENV variable.
+*   Update `Dockerfile` as per your custom changes. At minimum, update LABEL version and mode to reflect an updated tag. You can also update `hugo extended` to the [current release](https://github.com/gohugoio/hugo/releases) by updating *myhugo* ENV variable in `Dockerfile`. Optionally, [update related go version](https://go.dev/dl/) with *mygo* ENV variable and [dart-sass](https://github.com/sass/dart-sass/releases) with *mydartsass* variable. Change installation commands for prebuilt go and dart-sass binaries as and when required.
 
 *   If you need to update [jekyll](https://jekyllrb.com/) related gems, update `Gemfile` while ensuring gem [version requirements](https://pages.github.com/versions/) for [github-pages](https://github.com/github/pages-gem) gem.
 
@@ -39,11 +39,13 @@ Here, I am using `docker buildx build` from [Docker Desktop v4.22.0 on mac os 15
 ## replace --push with --load to load arch specific image locally
 docker buildx build \
 	--platform linux/arm64/v8,linux/amd64 \
-	--tag sbamin/sitebuilder:1.5.7 \
+	--tag sbamin/sitebuilder:1.5.8 \
 	--tag sbamin/sitebuilder:latest \
 	--push \
 	--file Dockerfile .
 ```
+
+Check [docker hub: sbamin/sitebuilder](https://hub.docker.com/r/sbamin/sitebuilder/tags) and should show an updated tag. If so, update local image using `docker images` and then `docker pull sbamin/sitebuilder` to get a latest tag.
 
 ### update Gemfile.lock
 
@@ -52,7 +54,7 @@ docker buildx build \
 ```sh
 ## start container in an interactive session and mount local (host) directory
 ## to an empty location in the docker container.
-docker run --rm -it -v "$(pwd)":/hostspace sbamin/sitebuilder:1.5.7 /bin/bash
+docker run --rm -it -v "$(pwd)":/hostspace sbamin/sitebuilder /bin/bash
 
 ## copy (overwrite) local Gemfile.lock with an updated version from 
 ## the container
@@ -75,61 +77,61 @@ docker run --platform linux/amd64 --rm sbamin/sitebuilder /bin/bash -c "jekyll -
 ### Update github releases
 
 ```sh
-git add Dockerfile Dockerfile_arm64 Gemfile Gemfile.lock update_sitebuilder.md README.md
+git add Dockerfile Gemfile Gemfile.lock update_sitebuilder.md README.md
 
 ## write a multiline git commit message
 ## -s requires a valid gpg key for signing a message
 git commit -s -F- <<EOF
 Updated sitebuilder
-v1.5.7
+v1.5.8
 
 ## amd64
 
 jekyll 3.10.0
-hugo v0.145.0-666444f0a52132f9fec9f71cf25b441cc6a4f355+extended linux/amd64 BuildDate=2025-02-26T15:41:25Z VendorInfo=gohugoio
+hugo v0.153.2-798533a2013eab97198b0a155a8f4afab7e79865+extended linux/amd64 BuildDate=2025-12-22T16:53:01Z VendorInfo=gohugoio
 git version 2.39.5
-go version go1.24.1 linux/amd64
+go version go1.25.5 linux/amd64
 mkdocs                                    1.6.1
-mkdocs-autorefs                           1.4.1
+mkdocs-autorefs                           1.4.3
 mkdocs-get-deps                           0.2.0
-mkdocs-git-authors-plugin                 0.9.4
+mkdocs-git-authors-plugin                 0.10.0
 mkdocs-git-committers-plugin-2            2.5.0
-mkdocs-git-revision-date-localized-plugin 1.4.5
+mkdocs-git-revision-date-localized-plugin 1.5.0
 mkdocs-git-revision-date-plugin           0.3.2
-mkdocs-glightbox                          0.4.0
-mkdocs-macros-plugin                      1.3.7
-mkdocs-material                           9.6.9
+mkdocs-glightbox                          0.5.2
+mkdocs-macros-plugin                      1.5.0
+mkdocs-material                           9.7.1
 mkdocs-material-extensions                1.3.1
 mkdocs-minify-plugin                      0.8.0
 mkdocs-redirects                          1.2.2
-mkdocs-rss-plugin                         1.17.1
-mkdocstrings                              0.29.0
-mkdocstrings-python                       1.16.8
-mkdocstrings-shell                        1.0.1
+mkdocs-rss-plugin                         1.17.7
+mkdocstrings                              1.0.0
+mkdocstrings-python                       2.0.1
+mkdocstrings-shell                        1.0.4
 
 ## arm64
 
 jekyll 3.10.0
-hugo v0.145.0-666444f0a52132f9fec9f71cf25b441cc6a4f355+extended linux/arm64 BuildDate=2025-02-26T15:41:25Z VendorInfo=gohugoio
+hugo v0.153.2-798533a2013eab97198b0a155a8f4afab7e79865+extended linux/arm64 BuildDate=2025-12-22T16:53:01Z VendorInfo=gohugoio
 git version 2.39.5
-go version go1.24.1 linux/arm64
+go version go1.25.5 linux/arm64
 mkdocs                                    1.6.1
-mkdocs-autorefs                           1.4.1
+mkdocs-autorefs                           1.4.3
 mkdocs-get-deps                           0.2.0
-mkdocs-git-authors-plugin                 0.9.4
+mkdocs-git-authors-plugin                 0.10.0
 mkdocs-git-committers-plugin-2            2.5.0
-mkdocs-git-revision-date-localized-plugin 1.4.5
+mkdocs-git-revision-date-localized-plugin 1.5.0
 mkdocs-git-revision-date-plugin           0.3.2
-mkdocs-glightbox                          0.4.0
-mkdocs-macros-plugin                      1.3.7
-mkdocs-material                           9.6.9
+mkdocs-glightbox                          0.5.2
+mkdocs-macros-plugin                      1.5.0
+mkdocs-material                           9.7.1
 mkdocs-material-extensions                1.3.1
 mkdocs-minify-plugin                      0.8.0
 mkdocs-redirects                          1.2.2
-mkdocs-rss-plugin                         1.17.1
-mkdocstrings                              0.29.0
-mkdocstrings-python                       1.16.8
-mkdocstrings-shell                        1.0.1
+mkdocs-rss-plugin                         1.17.7
+mkdocstrings                              1.0.0
+mkdocstrings-python                       2.0.1
+mkdocstrings-shell                        1.0.4
 
 EOF
 

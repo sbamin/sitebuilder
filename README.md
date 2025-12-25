@@ -25,6 +25,8 @@ For MkDocs, docker image is using [mkdocs-material](https://squidfunk.github.io/
 docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder mkdocs serve -a 0.0.0.0:4000
 
 ## jekyll, preview at http://0.0.0.0:4000
+## PS: For jekyll serve, --no-watch may be needed on apple silicon
+## with an open issue with rb-notify gem.
 docker run -v "$(pwd):/web" --rm -P -p 127.0.0.1:4000:4000 sbamin/sitebuilder jekyll serve --watch --host=0.0.0.0 -c _devconfig.yml -d _sitelocal
 
 ## hugo, preview at http://0.0.0.0:4000

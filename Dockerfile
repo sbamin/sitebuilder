@@ -1,17 +1,18 @@
 ############################################################
 # Dockerfile for website build using jekyll, hugo, or mkdocs
 ############################################################
-## ruby version should be compliant with netlify and github-pages
-## managed build nodes, https://pages.github.com/versions/
+## ruby version should be compliant with github-pages
+## managed build nodes, https://pages.github.com/versions/ or
+## Dockerfile at https://github.com/github/pages-gem
 FROM ruby:3.3.7
 
 ## pull docker buildx platform arg
 ARG TARGETPLATFORM
 
 ## NOTE: installing beta version of mkdocs-material with blog support.
-LABEL version="1.5.7" \
-	mode="sitebuilder-1.5.7" \
-	author="Samirkumar Amin; tweet:sbamin; sbamin.com/contact" \
+LABEL version="1.5.8" \
+	mode="sitebuilder-1.5.8" \
+	author="Samirkumar Amin" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
 	LICENSE="MIT License, https://github.com/sbamin/sitebuilder/blob/master/LICENSE" \
@@ -37,8 +38,9 @@ RUN apt-get update && \
 ENV LC_ALL="C.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
-ENV myhugo="0.145.0"
-ENV mygo="1.24.1"
+ENV myhugo="0.153.2"
+ENV mygo="1.25.5"
+ENV mydartsass="1.97.1"
 
 #### Python 3 venv ####
 # Create and activate a Python virtual environment
@@ -85,8 +87,8 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 ## install latest hugo extended, including GO
 ## requires OS arch variable
 RUN case "$TARGETPLATFORM" in \
-        "linux/amd64") ARCH="amd64" ;; \
-        "linux/arm64") ARCH="arm64" ;; \
+        "linux/amd64") ARCH="amd64"; ARCH2="x64" ;; \
+        "linux/arm64") ARCH="arm64"; ARCH2="arm64" ;; \
         *) echo "Unsupported architecture: $TARGETPLATFORM" && exit 1 ;; \
     esac && \
     echo "Building for ARCH=$ARCH" && \
@@ -98,8 +100,14 @@ RUN case "$TARGETPLATFORM" in \
 	mkdir -p /opt/go/bin && \
 	chmod 775 /opt/go && \
 	chmod 775 /opt/go/bin && \
+	wget https://github.com/sass/dart-sass/releases/download/${mydartsass}/dart-sass-${mydartsass}-linux-${ARCH2}-musl.tar.gz && \
+	mkdir -p /opt/dart && \
+	chmod 775 /opt/dart && \
+	tar -C /opt/dart -xvzf dart-sass-${mydartsass}-linux-${ARCH2}-musl.tar.gz && \
+	mv -f /opt/dart/dart-sass /opt/dart/bin && \
 	apt-get clean && \
 	rm -f go${mygo}.linux-${ARCH}.tar.gz && \
+	rm -f dart-sass-${mydartsass}-linux-${ARCH2}-musl.tar.gz && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV GOPATH="/opt/go"
@@ -111,7 +119,7 @@ WORKDIR /web
 ## for mkdocstrings, set an intended path to python modules
 ENV PYTHONPATH="/web/api/py"
 
-ENV PATH="/opt/venv/bin:/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV PATH="/opt/venv/bin:/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/go/bin:/opt/go/bin:/opt/dart/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 #### expose ports for jekyll, mkdocs, and hugo serve command ####
 EXPOSE 4000
