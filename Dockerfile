@@ -10,8 +10,8 @@ FROM ruby:3.3.7
 ARG TARGETPLATFORM
 
 ## NOTE: installing beta version of mkdocs-material with blog support.
-LABEL version="1.5.8" \
-	mode="sitebuilder-1.5.8" \
+LABEL version="1.5.9" \
+	mode="sitebuilder-1.5.9" \
 	author="Samirkumar Amin" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
@@ -38,9 +38,10 @@ RUN apt-get update && \
 ENV LC_ALL="C.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
-ENV myhugo="0.153.2"
-ENV mygo="1.25.5"
-ENV mydartsass="1.97.1"
+ENV myhugo="0.155.3"
+ENV mygo="1.26.0"
+ENV mydartsass="1.97.3"
+ENV mypagefind="v1.5.0-beta.1"
 
 #### Python 3 venv ####
 # Create and activate a Python virtual environment
@@ -54,20 +55,21 @@ ENV PATH="/opt/venv/bin:$PATH"
 ## This may differ based on gems and plugins used
 COPY Gemfile /tmp/
 
+## jekyll setup
 RUN mkdir -p /scratch && \
     mv /tmp/Gemfile /scratch/ && \
     cd /scratch && \
     bundle install && \
     mkdir -p /web
 
-#### git ####
+## git
 RUN apt-get install -y python3-launchpadlib && \
 	add-apt-repository ppa:git-core/ppa && \
     apt-get update && \
     apt-get install -y python3-launchpadlib git && \
     git --version
 
-#### Hugo, MkDocs, and theme-mkdocs-material ####
+#### MkDocs, mkdocs-material, hugo ####
 ## https://github.com/squidfunk/mkdocs-material
 ## issue with Hash Sum mismatch
 RUN	rm -rf /var/lib/apt/lists/partial && \
@@ -77,18 +79,16 @@ RUN	rm -rf /var/lib/apt/lists/partial && \
 	pip3 install --upgrade singledispatch nltk six && \
 	pip3 install markdown pygments fontawesome_markdown pymdown-extensions && \
 	pip3 install "mkdocs-material[imaging,recommended,git]" && \
-	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin mkdocs-glightbox && \
+	pip3 install mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin mkdocs-glightbox mkdocstrings mkdocstrings-python mkdocstrings-shell mkquartodocs && \
 	## force update mkdocs env
 	pip3 install --upgrade "mkdocs-material[imaging,recommended,git]" && \
 	pip3 install --upgrade markdown pygments fontawesome_markdown pymdown-extensions && \
-	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin mkdocs-glightbox mkdocstrings mkdocstrings-python mkdocstrings-shell && \
-	git config --global --add safe.directory /web
-
-## install latest hugo extended, including GO
-## requires OS arch variable
-RUN case "$TARGETPLATFORM" in \
-        "linux/amd64") ARCH="amd64"; ARCH2="x64" ;; \
-        "linux/arm64") ARCH="arm64"; ARCH2="arm64" ;; \
+	pip3 install --upgrade mkdocs mkdocs-material mkdocs-git-revision-date-plugin  mkdocs-git-revision-date-localized-plugin mkdocs-minify-plugin mkdocs-redirects pymdown-extensions mkdocs-macros-plugin mike mkdocs-git-authors-plugin mkdocs-glightbox mkdocstrings mkdocstrings-python mkdocstrings-shell mkquartodocs && \
+	git config --global --add safe.directory /web && \
+	## install latest hugo extended, including GO, dart-sass, and pagefind
+	case "$TARGETPLATFORM" in \
+        "linux/amd64") ARCH="amd64"; ARCH2="x64"; ARCH3="x86_64" ;; \
+        "linux/arm64") ARCH="arm64"; ARCH2="arm64"; ARCH3="aarch64" ;; \
         *) echo "Unsupported architecture: $TARGETPLATFORM" && exit 1 ;; \
     esac && \
     echo "Building for ARCH=$ARCH" && \
@@ -105,6 +105,9 @@ RUN case "$TARGETPLATFORM" in \
 	chmod 775 /opt/dart && \
 	tar -C /opt/dart -xvzf dart-sass-${mydartsass}-linux-${ARCH2}-musl.tar.gz && \
 	mv -f /opt/dart/dart-sass /opt/dart/bin && \
+	## install pagefid
+	cd /usr/local/bin && \
+	curl -sL https://github.com/Pagefind/pagefind/releases/download/${mypagefind}/pagefind-${mypagefind}-${ARCH3}-unknown-linux-musl.tar.gz | tar xz && chmod 755 pagefind && \
 	apt-get clean && \
 	rm -f go${mygo}.linux-${ARCH}.tar.gz && \
 	rm -f dart-sass-${mydartsass}-linux-${ARCH2}-musl.tar.gz && \
