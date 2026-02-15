@@ -39,7 +39,7 @@ Here, I am using `docker buildx build` from [Docker Desktop v4.22.0 on mac os 15
 ## replace --push with --load to load arch specific image locally
 docker buildx build \
 	--platform linux/arm64/v8,linux/amd64 \
-	--tag sbamin/sitebuilder:1.5.8 \
+	--tag sbamin/sitebuilder:1.5.9 \
 	--tag sbamin/sitebuilder:latest \
 	--push \
 	--file Dockerfile .
@@ -68,10 +68,10 @@ exit
 
 ```sh
 ## we already pushed both, updated version and latest tag to docker
-docker run --rm sbamin/sitebuilder /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep mkdocs"
+docker run --rm sbamin/sitebuilder /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep -E 'mkdocs|quarto' && pagefind --version && sass --version"
 
 ## for non-os compliant OS, e.g., amd64 if using macos M2
-docker run --platform linux/amd64 --rm sbamin/sitebuilder /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep mkdocs"
+docker run --platform linux/amd64 --rm sbamin/sitebuilder /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep -E 'mkdocs|quarto' && pagefind --version && sass --version"
 ```
 
 ### Update github releases
@@ -83,20 +83,24 @@ git add Dockerfile Gemfile Gemfile.lock update_sitebuilder.md README.md
 ## -s requires a valid gpg key for signing a message
 git commit -s -F- <<EOF
 Updated sitebuilder
-v1.5.8
+v1.5.9
+
+- ✨ added pagefind search
+- 🙅‍♂️ mkquartodocs plugin is not functional
+  - prefer running quarto docs locally and copy generated md or html to sitebuilder
 
 ## amd64
 
 jekyll 3.10.0
-hugo v0.153.2-798533a2013eab97198b0a155a8f4afab7e79865+extended linux/amd64 BuildDate=2025-12-22T16:53:01Z VendorInfo=gohugoio
+hugo v0.155.3-8a858213b73907e823e2be2b5640a0ce4c04d295+extended linux/amd64 BuildDate=2026-02-08T16:40:42Z VendorInfo=gohugoio
 git version 2.39.5
-go version go1.25.5 linux/amd64
+go version go1.26.0 linux/amd64
 mkdocs                                    1.6.1
-mkdocs-autorefs                           1.4.3
+mkdocs-autorefs                           1.4.4
 mkdocs-get-deps                           0.2.0
 mkdocs-git-authors-plugin                 0.10.0
 mkdocs-git-committers-plugin-2            2.5.0
-mkdocs-git-revision-date-localized-plugin 1.5.0
+mkdocs-git-revision-date-localized-plugin 1.5.1
 mkdocs-git-revision-date-plugin           0.3.2
 mkdocs-glightbox                          0.5.2
 mkdocs-macros-plugin                      1.5.0
@@ -104,23 +108,26 @@ mkdocs-material                           9.7.1
 mkdocs-material-extensions                1.3.1
 mkdocs-minify-plugin                      0.8.0
 mkdocs-redirects                          1.2.2
-mkdocs-rss-plugin                         1.17.7
-mkdocstrings                              1.0.0
-mkdocstrings-python                       2.0.1
+mkdocs-rss-plugin                         1.17.9
+mkdocstrings                              1.0.3
+mkdocstrings-python                       2.0.2
 mkdocstrings-shell                        1.0.4
+mkquartodocs                              0.7.0
+pagefind 1.5.0-beta.1
+Ruby Sass 3.7.4
 
 ## arm64
 
 jekyll 3.10.0
-hugo v0.153.2-798533a2013eab97198b0a155a8f4afab7e79865+extended linux/arm64 BuildDate=2025-12-22T16:53:01Z VendorInfo=gohugoio
+hugo v0.155.3-8a858213b73907e823e2be2b5640a0ce4c04d295+extended linux/arm64 BuildDate=2026-02-08T16:40:42Z VendorInfo=gohugoio
 git version 2.39.5
-go version go1.25.5 linux/arm64
+go version go1.26.0 linux/arm64
 mkdocs                                    1.6.1
-mkdocs-autorefs                           1.4.3
+mkdocs-autorefs                           1.4.4
 mkdocs-get-deps                           0.2.0
 mkdocs-git-authors-plugin                 0.10.0
 mkdocs-git-committers-plugin-2            2.5.0
-mkdocs-git-revision-date-localized-plugin 1.5.0
+mkdocs-git-revision-date-localized-plugin 1.5.1
 mkdocs-git-revision-date-plugin           0.3.2
 mkdocs-glightbox                          0.5.2
 mkdocs-macros-plugin                      1.5.0
@@ -128,10 +135,13 @@ mkdocs-material                           9.7.1
 mkdocs-material-extensions                1.3.1
 mkdocs-minify-plugin                      0.8.0
 mkdocs-redirects                          1.2.2
-mkdocs-rss-plugin                         1.17.7
-mkdocstrings                              1.0.0
-mkdocstrings-python                       2.0.1
+mkdocs-rss-plugin                         1.17.9
+mkdocstrings                              1.0.3
+mkdocstrings-python                       2.0.2
 mkdocstrings-shell                        1.0.4
+mkquartodocs                              0.7.0
+pagefind 1.5.0-beta.1
+Ruby Sass 3.7.4
 
 EOF
 
@@ -142,9 +152,9 @@ git push
 
 With buildx command and `--push` argument above, we already have uploaded images to docker hub, include `latest` alias.
 
-*   Confirm using `docker images` that IMAGE ID of a built image, `sbamin/sitebuilder:1.5.x` matches with aliases created above. If all good, remove previous version of sitebuilder, `docker rmi sbamin/sitebuilder:1.5.4`
+*   Confirm using `docker images` that IMAGE ID of a built image, `sbamin/sitebuilder:1.5.x` matches with aliases created above. If all good, remove previous version of sitebuilder, `docker rmi sbamin/sitebuilder:1.5.*`
 
-Besides updating Docker Hub, if you are updating image also to github packages, update respective aliases. **I have stopped updating github container repo past v[1.5.6](https://github.com/sbamin/sitebuilder/releases)**
+Besides updating Docker Hub, if you are updating image also to github packages, update respective aliases. 
 
 * If using github container repo, this should work.
 
