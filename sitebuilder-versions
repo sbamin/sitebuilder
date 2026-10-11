@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+## print versions of tools in sitebuilder image
+
+echo "sitebuilder ${SITEBUILDER_VERSION:-unknown} $(uname -m)"
+ruby --version
+jekyll --version
+hugo version
+go version
+git --version
+python3 --version
+pip list 2>/dev/null | grep -E 'mkdocs|mike|quarto|pagefind'
+pagefind --version
+echo "dart-sass $(sass --version)"

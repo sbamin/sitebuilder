@@ -1,0 +1,5 @@
+## https://github.com/hadolint/hadolint#configure
+ignored:
+  ## apt package versions: base image digest pins the package set;
+  ## Debian removes old versions after security updates.
+  - DL3008

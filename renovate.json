@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "pip_requirements": {
+    "enabled": false
+  },
+  "pip-compile": {
+    "managerFilePatterns": ["/(^|/)requirements\\.txt$/"]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Tool versions in Dockerfile ARG lines",
+      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\nARG \\w+_VERSION=(?<currentValue>\\S+)"
+      ]
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Hugo tags have a v prefix; Dockerfile ARG does not",
+      "matchPackageNames": ["gohugoio/hugo"],
+      "extractVersion": "^v(?<version>.*)$"
+    },
+    {
+      "description": "Keep ruby on 3.3 as used by github-pages, https://pages.github.com/versions/",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ruby"],
+      "allowedVersions": "/^3\\.3\\./",
+      "groupName": "ruby base images"
+    }
+  ]
+}

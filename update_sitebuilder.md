@@ -17,73 +17,82 @@ git status
 
 ### Update packages
 
-*   Define docker image tag, e.g., `1.5.8` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
+All versions live in version-controlled files. Update them by hand. `renovate.json` is ready for the [Renovate app](https://github.com/apps/renovate), but the app is not installed now.
 
-*   Update `Dockerfile` as per your custom changes. At minimum, update LABEL version and mode to reflect an updated tag. You can also update `hugo extended` to the [current release](https://github.com/gohugoio/hugo/releases) by updating *myhugo* ENV variable in `Dockerfile`. Optionally, [update related go version](https://go.dev/dl/) with *mygo* ENV variable and [dart-sass](https://github.com/sass/dart-sass/releases) with *mydartsass* variable. Change installation commands for prebuilt go and dart-sass binaries as and when required.
+| What | Where |
+|---|---|
+| sitebuilder image tag | `ARG SITEBUILDER_VERSION` in `Dockerfile` |
+| [hugo extended](https://github.com/gohugoio/hugo/releases), [dart-sass](https://github.com/sass/dart-sass/releases) | `ARG HUGO_VERSION`, `ARG DART_SASS_VERSION` in `Dockerfile` |
+| ruby and [go](https://go.dev/dl/) | `FROM ruby:...` and `FROM golang:...` lines (tag and digest) in `Dockerfile` |
+| jekyll gems | `Gemfile` and `Gemfile.lock` |
+| mkdocs, plugins, pagefind | `requirements.in` (top-level) and `requirements.txt` (pinned) |
 
-*   If you need to update [jekyll](https://jekyllrb.com/) related gems, update `Gemfile` while ensuring gem [version requirements](https://pages.github.com/versions/) for [github-pages](https://github.com/github/pages-gem) gem.
+*   Set a new image tag, e.g., `1.5.10`, typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags), in `ARG SITEBUILDER_VERSION`. The commands below read the tag from `Dockerfile`.
 
-*   If you need to update mkdocs-material theme, please make related changes to mkdocs installation in Dockerfile as per [author's instructions from mkdocs-material website](https://squidfunk.github.io/mkdocs-material/upgrade/).
+*   Keep ruby on the version line used by [github-pages](https://pages.github.com/versions/). To get a new digest for a base image tag:
+
+```sh
+docker buildx imagetools inspect ruby:3.3.12-slim-trixie --format '{{json .Manifest.Digest}}'
+```
+
+*   Update python packages. Edit `requirements.in` if you add or remove a package. Then compile pinned versions with [uv](https://docs.astral.sh/uv/). See [mkdocs-material upgrade notes](https://squidfunk.github.io/mkdocs-material/upgrade/).
+
+```sh
+uv pip compile requirements.in --universal --python-version 3.13 --upgrade -o requirements.txt
+```
+
+*   Update jekyll gems. `Gemfile` keeps only `github-pages` and plugins that `github-pages` does not include. The build uses `Gemfile.lock` as is (frozen). To update the lock file, use the current sitebuilder image (host ruby is too old):
+
+```sh
+docker run --rm -v "$(pwd)":/hostspace -w /hostspace sbamin/sitebuilder bundle lock --update
+```
 
 ### build and push multi-arch images
 
-Here, I am using `docker buildx build` from [Docker Desktop v4.22.0 on mac os 15.3 M2](https://www.docker.com/products/docker-desktop/) to build both, amd64 and arm64/v8 images. [See this guide for multi-arch builds](https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/).
+Here, I am using `docker buildx build` from [Docker Desktop v4.22.0 on mac os 15.3 M2](https://www.docker.com/products/docker-desktop/) to build both, amd64 and arm64 images. [See this guide for multi-arch builds](https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/).
+
+GitHub Actions can also build and push: run the workflow manually, or push to `master` with `buildimg` in the commit message. The workflow needs repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (a [Docker Hub access token](https://docs.docker.com/security/access-tokens/), not the password).
 
 *   Start building a docker image. You need to replace `sbamin/sitebuilder` with your respective [docker hub user id](https://hub.docker.com) and image name you like to rename.
 
 ```sh
-## platform variable will be parsed in Dockerfile as TARGETPLATFORM
-## to download platform specific hugo and go packages
+## buildx sets TARGETARCH (amd64 or arm64) in Dockerfile
+## to download platform specific hugo and dart-sass
 
 ## requires login to docker hub from Docker Desktop app
 ## replace --push with --load to load arch specific image locally
+SB_VERSION="$(sed -n 's/^ARG SITEBUILDER_VERSION=//p' Dockerfile)"
 docker buildx build \
-	--platform linux/arm64/v8,linux/amd64 \
-	--tag sbamin/sitebuilder:1.5.9 \
+	--platform linux/arm64,linux/amd64 \
+	--tag "sbamin/sitebuilder:${SB_VERSION}" \
 	--tag sbamin/sitebuilder:latest \
+	--provenance=mode=max \
+	--sbom=true \
 	--push \
 	--file Dockerfile .
 ```
 
 Check [docker hub: sbamin/sitebuilder](https://hub.docker.com/r/sbamin/sitebuilder/tags) and should show an updated tag. If so, update local image using `docker images` and then `docker pull sbamin/sitebuilder` to get a latest tag.
 
-### update Gemfile.lock
-
-*   Once image is successfully built, copy `Gemfile.lock` back to host, so that we can update it with the most recent versions of gems.
-
-```sh
-## start container in an interactive session and mount local (host) directory
-## to an empty location in the docker container.
-docker run --rm -it -v "$(pwd)":/hostspace sbamin/sitebuilder /bin/bash
-
-## copy (overwrite) local Gemfile.lock with an updated version from 
-## the container
-cp /scratch/Gemfile.lock /hostspace/
-
-## exit container
-exit
-```
-
 *   Check installed or updated package versions
 
 ```sh
-## we already pushed both, updated version and latest tag to docker
-docker run --rm sbamin/sitebuilder /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep -E 'mkdocs|quarto' && pagefind --version && sass --version"
+docker run --rm sbamin/sitebuilder sitebuilder-versions
 
 ## for non-os compliant OS, e.g., amd64 if using macos M2
-docker run --platform linux/amd64 --rm sbamin/sitebuilder /bin/bash -c "jekyll --version && hugo version && git version && go version && pip list | grep -E 'mkdocs|quarto' && pagefind --version && sass --version"
+docker run --platform linux/amd64 --rm sbamin/sitebuilder sitebuilder-versions
 ```
 
 ### Update github releases
 
 ```sh
-git add Dockerfile Gemfile Gemfile.lock update_sitebuilder.md README.md
+git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.10.md
 
 ## write a multiline git commit message
 ## -s requires a valid gpg key for signing a message
 git commit -s -F- <<EOF
 Updated sitebuilder
-v1.5.9
+v1.5.10
 
 - ✨ added pagefind search
 - 🙅‍♂️ mkquartodocs plugin is not functional

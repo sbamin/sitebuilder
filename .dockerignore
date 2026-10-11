@@ -1,0 +1,6 @@
+## allowlist: send only build inputs to docker build context
+*
+!Gemfile
+!Gemfile.lock
+!requirements.txt
+!sitebuilder-versions
