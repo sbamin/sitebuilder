@@ -1,0 +1,13 @@
+mkdocs-material[imaging,recommended,git]
+mkdocs-git-revision-date-localized-plugin
+mkdocs-git-authors-plugin
+mkdocs-minify-plugin
+mkdocs-redirects
+mkdocs-macros-plugin
+mkdocs-glightbox
+mkdocstrings
+mkdocstrings-python
+mkdocstrings-shell
+mkquartodocs
+mike
+pagefind[extended]

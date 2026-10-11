@@ -306,14 +306,8 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  bundler (> 1.14)
-  ffi (>= 1.11.1)
   github-pages (>= 232)
-  jekyll (>= 3.10.0)
-  jekyll-mentions (>= 1.6.0)
-  jekyll-redirect-from (>= 0.16.0)
   jekyll-twitter-plugin
-  nokogiri (>= 1.16.7, < 2.0)
 
 BUNDLED WITH
    2.5.22
