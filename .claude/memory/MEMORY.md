@@ -1,0 +1,1 @@
+- [No docker without asking](no-docker-without-asking.md) — ask before any docker or test command in sitebuilder
