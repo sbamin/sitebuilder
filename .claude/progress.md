@@ -24,3 +24,4 @@
 - hadolint v2.15.1 (Docker Hub; ghcr denied): 0 errors; warnings DL3008 x2, DL3003+SC2164 (cd /tmp/gems), info DL3066 (USER name). CI threshold error -> passes.
 - hadolint fixes (WORKDIR, USER 1000:1000, .hadolint.yaml DL3008) -> hadolint clean; arm64 rebuilt. README tested and rewritten (removed -P which exposed 8000/1313 on 0.0.0.0; 127.0.0.1 preview; generic jekyll; pagefind; github-pages repository note; Docker Desktop file sharing; singularity pull/exec untested). Tests in ~/Desktop/tmp (only shared dir), cleaned.
 - Commit: CI hardening + hadolint + README. Not pushed.
+- Tag 1.5.10 (signed) at 430e2e4 (CI-built commit per image revision label); pushed; GitHub release 1.5.10 created. d1eab19 (.claude files) stays local.
