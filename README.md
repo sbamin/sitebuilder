@@ -14,7 +14,7 @@ For MkDocs, docker image is using [mkdocs-material](https://squidfunk.github.io/
 
 **NOTE:** docker image with a `latest` tag may have breaking changes and may not work with one or more of static site engines if your code is not compatible with the latest version. Please check [Release page](https://github.com/sbamin/sitebuilder/releases) for breaking changes, if any. If so, you may try using previous version of a docker image.
 
-**NOTE:** Since sitebuilder 1.6.0, the container runs as a non-root user, `sitebuilder` (uid 1000, gid 1000). On a Linux host where your uid is not 1000, add `--user "$(id -u):$(id -g)" -e HOME=/tmp` to the `docker run` commands below, so that files in `/web` stay writable by you. Run `docker run --rm sbamin/sitebuilder sitebuilder-versions` to see tool versions in the image.
+**NOTE:** Since sitebuilder 1.5.10, the container runs as a non-root user, `sitebuilder` (uid 1000, gid 1000). On a Linux host where your uid is not 1000, add `--user "$(id -u):$(id -g)" -e HOME=/tmp` to the `docker run` commands below, so that files in `/web` stay writable by you. Run `docker run --rm sbamin/sitebuilder sitebuilder-versions` to see tool versions in the image.
 
 ### Serve local for testing
 

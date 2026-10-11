@@ -27,7 +27,7 @@ All versions live in version-controlled files. Update them by hand. `renovate.js
 | jekyll gems | `Gemfile` and `Gemfile.lock` |
 | mkdocs, plugins, pagefind | `requirements.in` (top-level) and `requirements.txt` (pinned) |
 
-*   Set a new image tag, e.g., `1.6.0`, typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags), in `ARG SITEBUILDER_VERSION`. The commands below read the tag from `Dockerfile`.
+*   Set a new image tag, e.g., `1.5.10`, typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags), in `ARG SITEBUILDER_VERSION`. The commands below read the tag from `Dockerfile`.
 
 *   Keep ruby on the version line used by [github-pages](https://pages.github.com/versions/). To get a new digest for a base image tag:
 
@@ -86,13 +86,13 @@ docker run --platform linux/amd64 --rm sbamin/sitebuilder sitebuilder-versions
 ### Update github releases
 
 ```sh
-git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.6.0.md
+git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.10.md
 
 ## write a multiline git commit message
 ## -s requires a valid gpg key for signing a message
 git commit -s -F- <<EOF
 Updated sitebuilder
-v1.6.0
+v1.5.10
 
 - ✨ added pagefind search
 - 🙅‍♂️ mkquartodocs plugin is not functional

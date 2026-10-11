@@ -1,6 +1,6 @@
-# sitebuilder 1.6.0: changes
+# sitebuilder 1.5.10: changes
 
-This file records the changes to the image build in version 1.6.0.
+This file records the changes to the image build in version 1.5.10.
 
 Status: the files are changed. The image is not built and not tested yet.
 
@@ -8,6 +8,8 @@ Status: the files are changed. The image is not built and not tested yet.
 
 1. **dart-sass is now the `sass` command.** The `github-pages` gem installs Ruby Sass 3.7.4. Before, `/usr/local/bundle/bin` came before `/opt/dart/bin` in `PATH`, so `sass` ran Ruby Sass. Hugo needs dart-sass (`sass --embedded`). Now `/opt/dart/bin` comes first in `PATH`.
 2. **The git PPA is removed.** `ppa:git-core/ppa` is for Ubuntu only and had no effect on Debian. `software-properties-common` and `python3-launchpadlib` are removed too. git now comes from Debian trixie (2.47 line, before 2.39).
+
+2b. **dart-sass uses the glibc build.** The `-musl` build needs `/lib/ld-musl-*.so.1`, which Debian does not have, so dart-sass did not start. Earlier images had the same fault, hidden because `sass` ran Ruby Sass. A local build of 1.5.10 found it.
 
 ## B. Easier future edits
 
@@ -77,4 +79,4 @@ Status: the files are changed. The image is not built and not tested yet.
 ## Files
 
 - Changed: `Dockerfile`, `Gemfile`, `Gemfile.lock` (`DEPENDENCIES` block only), `.github/workflows/docker_build.yml`, `update_sitebuilder.md`, `README.md`.
-- New: `requirements.in`, `requirements.txt`, `sitebuilder-versions`, `.dockerignore`, `renovate.json`, `CHANGES_1.6.0.md`.
+- New: `requirements.in`, `requirements.txt`, `sitebuilder-versions`, `.dockerignore`, `renovate.json`, `CHANGES_1.5.10.md`.

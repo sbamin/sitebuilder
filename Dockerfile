@@ -6,7 +6,7 @@
 #### Versions: edit only this block for a new release ####
 ## Base images (ruby, golang) are pinned in FROM lines below.
 ## ruby should be compliant with github-pages, https://pages.github.com/versions/
-ARG SITEBUILDER_VERSION=1.6.0
+ARG SITEBUILDER_VERSION=1.5.10
 # renovate: datasource=github-releases depName=gohugoio/hugo
 ARG HUGO_VERSION=0.167.0
 # renovate: datasource=github-releases depName=sass/dart-sass
@@ -66,7 +66,7 @@ mkdir -p /opt/hugo
 tar -C /opt/hugo -xzf "${hugo_tgz}" hugo
 
 ## dart-sass has no checksum file; use the GitHub release asset digest
-export SASS_TGZ="dart-sass-${DART_SASS_VERSION}-linux-${SASS_ARCH}-musl.tar.gz"
+export SASS_TGZ="dart-sass-${DART_SASS_VERSION}-linux-${SASS_ARCH}.tar.gz"
 curl -fsSLO "https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/${SASS_TGZ}"
 sass_sha=$(curl -fsSL "https://api.github.com/repos/sass/dart-sass/releases/tags/${DART_SASS_VERSION}" |
     python3 -c 'import json, os, sys; print(next(a["digest"] for a in json.load(sys.stdin)["assets"] if a["name"] == os.environ["SASS_TGZ"]).removeprefix("sha256:"))')
