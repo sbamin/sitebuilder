@@ -10,8 +10,8 @@ FROM ruby:3.3.7
 ARG TARGETPLATFORM
 
 ## NOTE: installing beta version of mkdocs-material with blog support.
-LABEL version="1.5.9" \
-	mode="sitebuilder-1.5.9" \
+LABEL version="1.6.0" \
+	mode="sitebuilder-1.6.0" \
 	author="Samirkumar Amin" \
 	description="docker image to build jekyll, hugo or mkdocs supported website" \
 	website="https://github.com/sbamin/sitebuilder" \
@@ -47,9 +47,12 @@ RUN apt-get update && \
 ENV LC_ALL="C.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US.UTF-8"
-ENV myhugo="0.155.3"
-ENV mygo="1.26.0"
-ENV mydartsass="1.97.3"
+## https://github.com/gohugoio/hugo/releases
+ENV myhugo="0.167.0"
+## https://go.dev/dl/
+ENV mygo="1.27.2"
+## https://github.com/sass/dart-sass/releases
+ENV mydartsass="1.105.1"
 ENV mypagefind="v1.5.0-beta.1"
 
 #### Python 3 venv ####
@@ -98,9 +101,9 @@ RUN case "$TARGETPLATFORM" in \
         *) echo "Unsupported architecture: $TARGETPLATFORM" && exit 1 ;; \
     esac && \
     echo "Building for ARCH=$ARCH" && \
-	wget -q https://github.com/gohugoio/hugo/releases/download/v${myhugo}/hugo_extended_${myhugo}_linux-${ARCH}.deb && \
-	apt install ./hugo_extended_${myhugo}_linux-${ARCH}.deb -y && \
-	rm -f hugo_extended_${myhugo}_linux-${ARCH}.deb && \
+	wget -q https://github.com/gohugoio/hugo/releases/download/v${myhugo}/hugo_extended_withdeploy_${myhugo}_linux-${ARCH}.deb && \
+	apt install ./hugo_extended_withdeploy_${myhugo}_linux-${ARCH}.deb -y && \
+	rm -f hugo_extended_withdeploy_${myhugo}_linux-${ARCH}.deb && \
 	wget -q https://go.dev/dl/go${mygo}.linux-${ARCH}.tar.gz && \
 	tar -C /usr/local -xzf go${mygo}.linux-${ARCH}.tar.gz && \
 	mkdir -p /opt/go/bin && \

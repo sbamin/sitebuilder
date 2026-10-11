@@ -17,7 +17,7 @@ git status
 
 ### Update packages
 
-*   Define docker image tag, e.g., `1.5.8` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
+*   Define docker image tag, e.g., `1.6.0` typically a level up than [the current version](https://hub.docker.com/r/sbamin/sitebuilder/tags). You need to manually update several of commands below to reflect an updated tag.
 
 *   Update `Dockerfile` as per your custom changes. At minimum, update LABEL version and mode to reflect an updated tag. You can also update `hugo extended` to the [current release](https://github.com/gohugoio/hugo/releases) by updating *myhugo* ENV variable in `Dockerfile`. Optionally, [update related go version](https://go.dev/dl/) with *mygo* ENV variable and [dart-sass](https://github.com/sass/dart-sass/releases) with *mydartsass* variable. Change installation commands for prebuilt go and dart-sass binaries as and when required.
 
@@ -39,7 +39,7 @@ Here, I am using `docker buildx build` from [Docker Desktop v4.22.0 on mac os 15
 ## replace --push with --load to load arch specific image locally
 docker buildx build \
 	--platform linux/arm64/v8,linux/amd64 \
-	--tag sbamin/sitebuilder:1.5.9 \
+	--tag sbamin/sitebuilder:1.6.0 \
 	--tag sbamin/sitebuilder:latest \
 	--push \
 	--file Dockerfile .
@@ -83,7 +83,7 @@ git add Dockerfile Gemfile Gemfile.lock update_sitebuilder.md README.md
 ## -s requires a valid gpg key for signing a message
 git commit -s -F- <<EOF
 Updated sitebuilder
-v1.5.9
+v1.6.0
 
 - ✨ added pagefind search
 - 🙅‍♂️ mkquartodocs plugin is not functional

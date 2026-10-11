@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+## https://github.com/github/pages-gem
 group :sitebuilder do
 	gem 'bundler', '> 1.14'
 	gem 'github-pages', '>= 232'
