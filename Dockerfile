@@ -34,8 +34,8 @@ EOF
 
 ## jekyll and github-pages gems, versions from Gemfile.lock
 COPY Gemfile Gemfile.lock /tmp/gems/
+WORKDIR /tmp/gems
 RUN --mount=type=cache,target=/usr/local/bundle/cache <<EOF
-cd /tmp/gems
 BUNDLE_FROZEN=true bundle install --jobs "$(nproc)"
 find /usr/local/bundle/gems -path '*/ext/*' -name '*.o' -delete
 EOF
@@ -50,8 +50,9 @@ ln -s "$(echo /opt/venv/lib/python3*/site-packages/pagefind_bin_extended/pagefin
 EOF
 
 ## hugo extended and dart-sass, checksum verified
+## optional secret github_token avoids GitHub API rate limit (CI)
 WORKDIR /tmp/dl
-RUN <<EOF
+RUN --mount=type=secret,id=github_token <<EOF
 case "${TARGETARCH}" in
     amd64) SASS_ARCH="x64" ;;
     arm64) SASS_ARCH="arm64" ;;
@@ -68,7 +69,11 @@ tar -C /opt/hugo -xzf "${hugo_tgz}" hugo
 ## dart-sass has no checksum file; use the GitHub release asset digest
 export SASS_TGZ="dart-sass-${DART_SASS_VERSION}-linux-${SASS_ARCH}.tar.gz"
 curl -fsSLO "https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/${SASS_TGZ}"
-sass_sha=$(curl -fsSL "https://api.github.com/repos/sass/dart-sass/releases/tags/${DART_SASS_VERSION}" |
+gh_auth=()
+if [ -s /run/secrets/github_token ]; then
+    gh_auth=(-H "Authorization: Bearer $(cat /run/secrets/github_token)")
+fi
+sass_sha=$(curl -fsSL "${gh_auth[@]}" "https://api.github.com/repos/sass/dart-sass/releases/tags/${DART_SASS_VERSION}" |
     python3 -c 'import json, os, sys; print(next(a["digest"] for a in json.load(sys.stdin)["assets"] if a["name"] == os.environ["SASS_TGZ"]).removeprefix("sha256:"))')
 echo "${sass_sha}  ${SASS_TGZ}" | sha256sum -c -
 tar -C /opt -xzf "${SASS_TGZ}"
@@ -127,7 +132,7 @@ ENV SITEBUILDER_VERSION="${SITEBUILDER_VERSION}" \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PATH="/opt/venv/bin:/opt/dart/bin:/usr/local/bundle/bin:/usr/local/go/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-USER sitebuilder
+USER 1000:1000
 
 ## empty dir where user volume should be mounted
 ## to run jekyll/mkdocs/hugo related commands

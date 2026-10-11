@@ -45,7 +45,13 @@ Status: the files are changed. The image is not built and not tested yet.
     - `docker/metadata-action` pushes the version tag and `latest`. Before, CI pushed only `latest`.
     - Provenance (`mode=max`) and SBOM are on.
     - Trivy scans the pushed image for CRITICAL and HIGH problems. It only reports and does not fail the job.
+    - The build gets `GITHUB_TOKEN` as the BuildKit secret `github_token`. The dart-sass step uses it for the GitHub API call, so the shared runner IP does not hit the rate limit. Local builds work without it.
+    - The job stops if `ARG SITEBUILDER_VERSION` is not found in `Dockerfile`.
+    - `concurrency` stops two builds of the same branch from running at the same time.
+    - Checkout does not keep the git token (`persist-credentials: false`).
+    - Time limits: 10 minutes for lint, 90 minutes for build.
     - The secret is now `DOCKERHUB_TOKEN` (a Docker Hub access token). Before, it was `DOCKERHUB_PASSWORD`.
+14b. **hadolint fixes.** `WORKDIR /tmp/gems` replaces `cd` in `RUN` (DL3003, SC2164). `USER 1000:1000` replaces `USER sitebuilder`, so tools can see that the user is not root (DL3066). `.hadolint.yaml` ignores DL3008 (fixed apt versions), because the base image digest fixes the package set. hadolint v2.15.1 gives no findings.
 15. **`.dockerignore`** is an allowlist. Only `Gemfile`, `Gemfile.lock`, `requirements.txt` and `sitebuilder-versions` go to the build context.
 
 ## D. Smaller image
@@ -63,6 +69,17 @@ Status: the files are changed. The image is not built and not tested yet.
 23. **`sitebuilder-versions` script** shows all tool versions: `docker run --rm sbamin/sitebuilder sitebuilder-versions`. A `HEALTHCHECK` was not added, because the image is a build tool and not a service.
 24. The old comment about the mkdocs-material beta is removed.
 
+## README
+
+- `-P` is removed from the serve commands. It published ports 8000 and 1313 on all network interfaces (`0.0.0.0`). Now only `127.0.0.1:4000` is published.
+- Preview address is `http://127.0.0.1:4000`, not `http://0.0.0.0:4000`. Serve commands use `-it`, so Ctrl+C stops the server.
+- The jekyll serve command is generic (no site-specific `-c _devconfig.yml -d _sitelocal`). The old note about rb-inotify on Apple silicon is removed: `--watch` works in a local test. `--force_polling` is given as a fallback.
+- The hugo build command has `--rm`. A pagefind command is added.
+- New notes: `repository:` for `github-pages` sites, Docker Desktop file sharing on macOS, and arm64 images.
+- Singularity: `singularity pull` and `singularity exec` replace `singularity run` (not tested).
+- The broken Hugo link is fixed.
+- Local tests on arm64 (Docker Desktop, macOS): all build and serve commands in `README.md` work for mkdocs, jekyll (with and without a `github-pages` Gemfile) and hugo, and pagefind works.
+
 ## Changes for users
 
 - The container user is not root. On a Linux host with a uid other than 1000, use `--user` (see `README.md`).
@@ -79,4 +96,4 @@ Status: the files are changed. The image is not built and not tested yet.
 ## Files
 
 - Changed: `Dockerfile`, `Gemfile`, `Gemfile.lock` (`DEPENDENCIES` block only), `.github/workflows/docker_build.yml`, `update_sitebuilder.md`, `README.md`.
-- New: `requirements.in`, `requirements.txt`, `sitebuilder-versions`, `.dockerignore`, `renovate.json`, `CHANGES_1.5.10.md`.
+- New: `.hadolint.yaml`, `requirements.in`, `requirements.txt`, `sitebuilder-versions`, `.dockerignore`, `renovate.json`, `CHANGES_1.5.10.md`.
