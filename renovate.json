@@ -4,14 +4,17 @@
     "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
+  "timezone": "America/New_York",
+  "schedule": ["* 0-5 1,15 * *"],
+  "updateNotScheduled": false,
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
     "labels": ["security"],
-    "schedule": ["at any time"]
+    "schedule": ["* 0-5 1,15 * *"]
   },
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 6am on monday"]
+    "schedule": ["* 0-5 1,15 * *"]
   },
   "pip_requirements": {
     "enabled": false

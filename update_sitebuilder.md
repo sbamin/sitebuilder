@@ -17,7 +17,7 @@ git status
 
 ### Update packages
 
-All versions live in version-controlled files. The [Renovate app](https://github.com/apps/renovate) reads `renovate.json` and opens pull requests against `master` for base image digests, `ARG` tool versions, gems, Python packages and GitHub Actions. Security fixes (GitHub and OSV alerts) get a pull request at once, with the `security` label. Each Monday, lock file maintenance refreshes the indirect dependencies in `Gemfile.lock` and `requirements.txt`. You can also update the files by hand.
+All versions live in version-controlled files. The [Renovate app](https://github.com/apps/renovate) reads `renovate.json` and opens pull requests against `master` for base image digests, `ARG` tool versions, gems, Python packages and GitHub Actions. Renovate opens or updates pull requests only on the 1st and 15th of each month, before 6am America/New_York. This includes security fixes (GitHub and OSV alerts, with the `security` label) and lock file maintenance, which refreshes the indirect dependencies in `Gemfile.lock` and `requirements.txt`. To get an update earlier, tick its box in the Dependency Dashboard issue. Renovate does not build images: merge a pull request, then build with a `buildimg` commit or a manual run of the workflow. You can also update the files by hand.
 
 | What | Where |
 |---|---|
@@ -38,7 +38,8 @@ docker buildx imagetools inspect ruby:3.3.12-slim-trixie --format '{{json .Manif
 *   Update python packages. Edit `requirements.in` if you add or remove a package. Then compile pinned versions with [uv](https://docs.astral.sh/uv/). See [mkdocs-material upgrade notes](https://squidfunk.github.io/mkdocs-material/upgrade/).
 
 ```sh
-uv pip compile requirements.in --universal --python-version 3.13 --upgrade -o requirements.txt
+## keep the = forms; Renovate parses this command from the requirements.txt header
+uv pip compile requirements.in --universal --python-version=3.13 --upgrade --output-file=requirements.txt
 ```
 
 *   Update jekyll gems. `Gemfile` keeps only `github-pages` and plugins that `github-pages` does not include. The build uses `Gemfile.lock` as is (frozen). To update the lock file, use the current sitebuilder image (host ruby is too old):

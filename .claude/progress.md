@@ -32,3 +32,7 @@
 - Decisions: apt-get upgrade in final stage; disable emSign C1/C3 in /etc/ca-certificates.conf with grep assert; Renovate on master (default) with OSV alerts, security PRs any time, weekly lockFileMaintenance. GitPython kept 3.1.62 (mkdocs-rss-plugin <3.2) and rubyzip 2.4.1 (github-pages -> jekyll-remote-theme 0.4.3 <3.0): documented as known open alerts.
 - Done (user approved docker): Gemfile.lock via bundle lock --update in ruby:3.3.13 (~/Desktop/tmp mount); requirements.txt via uv --upgrade; arm64 build sitebuilder:1.5.11 OK; checksums OK; libssl3t64 deb13u3, ca-certificates deb13u1, certifi 2026.10.23; HTTPS from ruby, python, git OK; hugo dartsass, mkdocs, jekyll smoke OK; pip check OK; hadolint clean; Renovate validator OK. CHANGES_1.5.11.md added.
 - Not done: amd64 build, Trivy scan, commit, Renovate app install (user action on GitHub).
+- PR #17 merged (web UI; merge title had no buildimg, so build skipped). Alerts 107, 67 dismissed (tolerable_risk). Renovate auto-closed #14, #15. Build dispatched manually: run 40050181406.
+- User note: ubuntu-latest moves to Ubuntu 26 from 2026-10-19; saved as memory for next release.
+- Renovate schedule set to 1st and 15th (before 6am America/New_York) for all updates incl. security and lock file maintenance; updateNotScheduled false. Not committed.
+- Fixed Renovate "pip-compile error": header needs --python-version=3.13 and --output-file= (equals forms); local renovate extract OK. Not committed.
