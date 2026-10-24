@@ -6,18 +6,18 @@
 #### Versions: edit only this block for a new release ####
 ## Base images (ruby, golang) are pinned in FROM lines below.
 ## ruby should be compliant with github-pages, https://pages.github.com/versions/
-ARG SITEBUILDER_VERSION=1.5.10
+ARG SITEBUILDER_VERSION=1.5.11
 # renovate: datasource=github-releases depName=gohugoio/hugo
-ARG HUGO_VERSION=0.167.0
+ARG HUGO_VERSION=0.168.0
 # renovate: datasource=github-releases depName=sass/dart-sass
-ARG DART_SASS_VERSION=1.105.1
+ARG DART_SASS_VERSION=1.106.1
 
 #### Go toolchain (for hugo modules) ####
 ## https://go.dev/dl/
-FROM golang:1.27.2-trixie@sha256:e58d6f83b3416618d8bcac2b3dde1b7f7e3c4a77d25e88637f8bbae81536c48d AS go
+FROM golang:1.27.3-trixie@sha256:fbb7ae40b62ff8afe31662df570d39b4f5052ac32b90dae8e60d7657a20a74f4 AS go
 
 #### Builder: gems, python venv, hugo, dart-sass ####
-FROM ruby:3.3.12-trixie@sha256:a91b6ac1b9b18d33812480856e4bc39c5c492ff9c6cc810d916cc3f0cc1d0eab AS builder
+FROM ruby:3.3.13-trixie@sha256:6ccc0bb9206438bcb662a603ebdf9948b135284a49b24c2bc954d8f28c931d4b AS builder
 
 ARG TARGETARCH
 ARG HUGO_VERSION
@@ -82,7 +82,7 @@ mv /opt/dart-sass /opt/dart/bin
 EOF
 
 #### Final image ####
-FROM ruby:3.3.12-slim-trixie@sha256:47b93492bc6afc708dc4f2478c7f1867725c64b3bf43b94ea1bad2dac0314f02
+FROM ruby:3.3.13-slim-trixie@sha256:4537e7d5459348e8f082e56599df520d9dab5f8de62eb86f0a2de4837c441e9f
 
 ARG SITEBUILDER_VERSION
 
@@ -96,12 +96,15 @@ LABEL org.opencontainers.image.title="sitebuilder" \
 
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
+## apt-get upgrade: Debian security fixes (openssl, ca-certificates) newer than the base image digest
 ## git and openssh-client: hugo modules, mike, git plugins
 ## libcairo2: mkdocs-material imaging (social cards)
+## emSign C1, C3 roots: distrusted by Mozilla after the 2026-10 eMudhra key compromise; Debian still ships them
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked <<EOF
 rm -f /etc/apt/apt.conf.d/docker-clean
 apt-get update
+apt-get upgrade -y --no-install-recommends
 apt-get install -y --no-install-recommends \
     git \
     openssh-client \
@@ -112,6 +115,11 @@ groupadd --gid 1000 sitebuilder
 useradd --uid 1000 --gid 1000 --create-home --shell /bin/bash sitebuilder
 install -d -o sitebuilder -g sitebuilder /web /opt/go
 git config --system --add safe.directory '*'
+for crt in emSign_Root_CA_-_C1 emSign_ECC_Root_CA_-_C3; do
+    sed -i "s|^mozilla/${crt}.crt\$|!&|" /etc/ca-certificates.conf
+    grep -qx "!mozilla/${crt}.crt" /etc/ca-certificates.conf
+done
+update-ca-certificates --fresh
 EOF
 
 COPY --from=go /usr/local/go /usr/local/go

@@ -4,6 +4,15 @@
     "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "schedule": ["at any time"]
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
   "pip_requirements": {
     "enabled": false
   },

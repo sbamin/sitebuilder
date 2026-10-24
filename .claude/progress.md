@@ -25,3 +25,10 @@
 - hadolint fixes (WORKDIR, USER 1000:1000, .hadolint.yaml DL3008) -> hadolint clean; arm64 rebuilt. README tested and rewritten (removed -P which exposed 8000/1313 on 0.0.0.0; 127.0.0.1 preview; generic jekyll; pagefind; github-pages repository note; Docker Desktop file sharing; singularity pull/exec untested). Tests in ~/Desktop/tmp (only shared dir), cleaned.
 - Commit: CI hardening + hadolint + README. Not pushed.
 - Tag 1.5.10 (signed) at 430e2e4 (CI-built commit per image revision label); pushed; GitHub release 1.5.10 created. d1eab19 (.claude files) stays local.
+
+## 2026-10-23 - Security release 1.5.11 (SSL and others), enable Renovate
+- User prompt: update sitebuilder for recent SSL security issues and others; enable Renovate; check Dependabot alerts page.
+- Findings: Debian DSA-6531-1 (openssl 3.5.7-1~deb13u3); eMudhra/emSign CA key compromise (DSA-6572-1 ca-certificates deb13u1 drops G3 only; Mozilla/certifi also drop C1, C3); ruby 3.3.13 security release; go 1.27.3; 72 open Dependabot alerts (pillow, certifi, filelock, gitpython, gems).
+- Decisions: apt-get upgrade in final stage; disable emSign C1/C3 in /etc/ca-certificates.conf with grep assert; Renovate on master (default) with OSV alerts, security PRs any time, weekly lockFileMaintenance. GitPython kept 3.1.62 (mkdocs-rss-plugin <3.2) and rubyzip 2.4.1 (github-pages -> jekyll-remote-theme 0.4.3 <3.0): documented as known open alerts.
+- Done (user approved docker): Gemfile.lock via bundle lock --update in ruby:3.3.13 (~/Desktop/tmp mount); requirements.txt via uv --upgrade; arm64 build sitebuilder:1.5.11 OK; checksums OK; libssl3t64 deb13u3, ca-certificates deb13u1, certifi 2026.10.23; HTTPS from ruby, python, git OK; hugo dartsass, mkdocs, jekyll smoke OK; pip check OK; hadolint clean; Renovate validator OK. CHANGES_1.5.11.md added.
+- Not done: amd64 build, Trivy scan, commit, Renovate app install (user action on GitHub).
