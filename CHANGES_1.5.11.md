@@ -2,7 +2,7 @@
 
 This file records the changes to the image build in version 1.5.11. It is a security release.
 
-Status: local arm64 build and checks pass. The amd64 build is not tested yet.
+Status: local arm64 build and checks pass. CI built and pushed amd64 and arm64 (run 40050181406, revision 30b43c5). Trivy: 0 critical, 7 high (see D).
 
 ## A. SSL and TLS
 
@@ -25,3 +25,5 @@ Status: local arm64 build and checks pass. The amd64 build is not tested yet.
 
 - **GitPython 3.1.62** (alert 107, fixed in 3.2.1). `mkdocs-rss-plugin` 1.19.0, installed by `mkdocs-material[recommended]`, needs `GitPython<3.2`. The fault is in `create_submodule()`, which the mkdocs git plugins do not call.
 - **rubyzip 2.4.1** (alert 67, fixed in 3.4.0). `github-pages` 232 pins `jekyll-remote-theme` 0.4.3, which needs `rubyzip < 3.0`. The fault is in archive extraction. It applies only to a remote theme from an untrusted source.
+- **pip 26.2.2** (the latest) bundles urllib3 2.7.0, msgpack 1.1.2 and setuptools 70.3.0 (pkg_resources) in `pip/_vendor`. Trivy reports them as high. The venv itself has urllib3 2.8.0 and msgpack 1.2.3. The bundled copies run only when you run `pip` in the image.
+- **hugo 0.168.0** (the latest) is compiled with Go 1.27.2, so it has CVE-2026-111943 (crypto/x509, man-in-the-middle). This applies when hugo itself fetches over HTTPS, e.g. `resources.GetRemote` or `hugo deploy`. Hugo modules use the image Go 1.27.3. Take the next hugo release.
