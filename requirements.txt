@@ -92,6 +92,7 @@ mike==2.2.0
     # via -r requirements.in
 mkdocs==1.6.1
     # via
+    #   -r requirements.in
     #   mike
     #   mkdocs-autorefs
     #   mkdocs-git-authors-plugin

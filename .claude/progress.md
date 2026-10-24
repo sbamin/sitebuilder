@@ -40,3 +40,4 @@
 - User: all three -> CHANGES_1.5.11.md known items updated; push dev; signed tag 1.5.11 at 30b43c5; GitHub release.
 - User: never force-push without a prompt right before it (saved as memory). Rebuild run 40052170692 on d9d73f0 in progress; tag move waits for user confirmation.
 - Rebuild run 40052170692 OK (revision d9d73f0, amd64+arm64, Trivy same 7 HIGH, 0 CRITICAL). New signed tag 1.5.11 at d9d73f0 made locally; user force-pushed it manually (prefers to do force pushes).
+- User: guard against MkDocs 2.0. Added mkdocs<2 to requirements.in, Renovate allowedVersions <2 for mkdocs, recompiled requirements.txt (no version change; mkdocs 1.6.1, material 9.7.7 already caps <2). Not committed.

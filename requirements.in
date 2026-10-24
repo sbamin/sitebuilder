@@ -1,3 +1,5 @@
+## MkDocs 2.0 drops plugins and themes, https://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/
+mkdocs<2
 mkdocs-material[imaging,recommended,git]
 mkdocs-git-revision-date-localized-plugin
 mkdocs-git-authors-plugin

@@ -39,6 +39,11 @@
       "extractVersion": "^v(?<version>.*)$"
     },
     {
+      "description": "MkDocs 2.0 drops plugins and themes, https://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/",
+      "matchPackageNames": ["mkdocs"],
+      "allowedVersions": "<2"
+    },
+    {
       "description": "Keep ruby on 3.3 as used by github-pages, https://pages.github.com/versions/",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ruby"],
