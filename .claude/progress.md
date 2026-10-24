@@ -38,3 +38,5 @@
 - Fixed Renovate "pip-compile error": header needs --python-version=3.13 and --output-file= (equals forms); local renovate extract OK. Not committed.
 - Build run 40050181406 OK: sbamin/sitebuilder:1.5.11 + latest, amd64+arm64, revision 30b43c5. Trivy HIGH 7, CRITICAL 0: GitPython 3.1.62, rubyzip 2.4.1 (known); pip 26.2.2 (latest) vendors urllib3 2.7.0, msgpack 1.1.2, setuptools 70.3.0; hugo 0.168.0 built with go 1.27.2 (CVE-2026-111943 crypto/x509). No fix upstream yet. Tag and release not done.
 - User: all three -> CHANGES_1.5.11.md known items updated; push dev; signed tag 1.5.11 at 30b43c5; GitHub release.
+- User: never force-push without a prompt right before it (saved as memory). Rebuild run 40052170692 on d9d73f0 in progress; tag move waits for user confirmation.
+- Rebuild run 40052170692 OK (revision d9d73f0, amd64+arm64, Trivy same 7 HIGH, 0 CRITICAL). New signed tag 1.5.11 at d9d73f0 made locally; user force-pushed it manually (prefers to do force pushes).
