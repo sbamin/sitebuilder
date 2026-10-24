@@ -61,11 +61,11 @@ docker run -v "$(pwd):/web" --rm sbamin/sitebuilder pagefind --site site
 If you prefer using [singularity/apptainer](https://docs.sylabs.io/guides/latest/user-guide/singularity_and_docker.html), get a SIF image and run commands from the site root directory. Singularity runs as your own user and mounts the current directory, so `--user` is not needed.
 
 ```sh
-## writes sitebuilder_1.5.10.sif in the current directory
-singularity pull docker://sbamin/sitebuilder:1.5.10
+## writes sitebuilder_1.5.11.sif in the current directory
+singularity pull docker://sbamin/sitebuilder:1.5.11
 
 ## e.g., build mkdocs site
-singularity exec sitebuilder_1.5.10.sif mkdocs build --clean --site-dir site
+singularity exec sitebuilder_1.5.11.sif mkdocs build --clean --site-dir site
 ```
 
 END

@@ -17,7 +17,7 @@ git status
 
 ### Update packages
 
-All versions live in version-controlled files. Update them by hand. `renovate.json` is ready for the [Renovate app](https://github.com/apps/renovate), but the app is not installed now.
+All versions live in version-controlled files. The [Renovate app](https://github.com/apps/renovate) reads `renovate.json` and opens pull requests against `master` for base image digests, `ARG` tool versions, gems, Python packages and GitHub Actions. Security fixes (GitHub and OSV alerts) get a pull request at once, with the `security` label. Each Monday, lock file maintenance refreshes the indirect dependencies in `Gemfile.lock` and `requirements.txt`. You can also update the files by hand.
 
 | What | Where |
 |---|---|
@@ -86,7 +86,7 @@ docker run --platform linux/amd64 --rm sbamin/sitebuilder sitebuilder-versions
 ### Update github releases
 
 ```sh
-git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.10.md
+git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.11.md
 
 ## write a multiline git commit message
 ## -s requires a valid gpg key for signing a message
