@@ -6,8 +6,6 @@ babel==2.18.0
     #   mkdocs-material
 backrefs==8.1
     # via mkdocs-material
-cachecontrol==0.14.4
-    # via mkdocs-rss-plugin
 cairocffi==1.7.1
     # via cairosvg
 cairosvg==2.9.1
@@ -33,19 +31,17 @@ cssselect2==0.10.1
     # via cairosvg
 defusedxml==0.7.1
     # via cairosvg
-filelock==4.2.4
-    # via cachecontrol
 ghp-import==2.1.0
     # via
     #   mkdocs
     #   properdocs
 gitdb==4.0.12
     # via gitpython
-gitpython==3.1.62
+gitpython==3.2.1
     # via
     #   mkdocs-git-committers-plugin-2
     #   mkdocs-git-revision-date-localized-plugin
-    #   mkdocs-rss-plugin
+    #   mkdocs-material
 griffelib==2.4.1
     # via mkdocstrings-python
 hjson==3.1.0
@@ -101,7 +97,6 @@ mkdocs==1.6.1
     #   mkdocs-material
     #   mkdocs-minify-plugin
     #   mkdocs-redirects
-    #   mkdocs-rss-plugin
     #   mkdocstrings
     #   mkquartodocs
 mkdocs-autorefs==1.4.5
@@ -122,7 +117,7 @@ mkdocs-glightbox==0.5.2
     # via -r requirements.in
 mkdocs-macros-plugin==1.5.0
     # via -r requirements.in
-mkdocs-material==9.7.7
+mkdocs-material==9.8.0
     # via -r requirements.in
 mkdocs-material-extensions==1.3.1
     # via mkdocs-material
@@ -131,11 +126,7 @@ mkdocs-minify-plugin==0.8.0
     #   -r requirements.in
     #   mkdocs-material
 mkdocs-redirects==1.2.3
-    # via
-    #   -r requirements.in
-    #   mkdocs-material
-mkdocs-rss-plugin==1.19.0
-    # via mkdocs-material
+    # via -r requirements.in
 mkdocstrings==1.0.8
     # via
     #   -r requirements.in
@@ -147,8 +138,6 @@ mkdocstrings-shell==1.0.5
     # via -r requirements.in
 mkquartodocs==0.7.0
     # via -r requirements.in
-msgpack==1.2.3
-    # via cachecontrol
 packaging==26.3
     # via
     #   mkdocs
@@ -175,9 +164,7 @@ platformdirs==4.13.5
     #   mkdocs-get-deps
     #   properdocs
 properdocs==1.6.7
-    # via
-    #   mkdocs-redirects
-    #   mkdocs-rss-plugin
+    # via mkdocs-redirects
 pycparser==3.12 ; implementation_name != 'PyPy'
     # via cffi
 pygments==2.21.0
@@ -209,11 +196,9 @@ pyyaml-env-tag==1.1
     #   properdocs
 requests==2.34.2
     # via
-    #   cachecontrol
     #   mkdocs-git-committers-plugin-2
     #   mkdocs-macros-plugin
     #   mkdocs-material
-    #   mkdocs-rss-plugin
 selectolax==1.0.2
     # via mkdocs-glightbox
 shellman==1.0.3
@@ -233,7 +218,6 @@ tinycss2==1.5.1
 tzdata==2025.3
     # via
     #   mkdocs-git-revision-date-localized-plugin
-    #   mkdocs-rss-plugin
     #   python-dateutil
 urllib3==2.8.0
     # via requests
