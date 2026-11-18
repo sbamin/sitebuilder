@@ -8,16 +8,16 @@
 ## ruby should be compliant with github-pages, https://pages.github.com/versions/
 ARG SITEBUILDER_VERSION=1.5.11
 # renovate: datasource=github-releases depName=gohugoio/hugo
-ARG HUGO_VERSION=0.168.0
+ARG HUGO_VERSION=0.170.0
 # renovate: datasource=github-releases depName=sass/dart-sass
 ARG DART_SASS_VERSION=1.106.1
 
 #### Go toolchain (for hugo modules) ####
 ## https://go.dev/dl/
-FROM golang:1.27.3-trixie@sha256:fbb7ae40b62ff8afe31662df570d39b4f5052ac32b90dae8e60d7657a20a74f4 AS go
+FROM golang:1.27.4-trixie@sha256:b54b2639de8c1bfe538ec5ffc45f29b1932235ac5f6d63c059853646677112d9 AS go
 
 #### Builder: gems, python venv, hugo, dart-sass ####
-FROM ruby:3.3.13-trixie@sha256:6ccc0bb9206438bcb662a603ebdf9948b135284a49b24c2bc954d8f28c931d4b AS builder
+FROM ruby:3.3.13-trixie@sha256:1a23507b0dce53a9c8fde7d8777390d647738495e4badb7ef5dc84f51ec5304b AS builder
 
 ARG TARGETARCH
 ARG HUGO_VERSION
@@ -82,7 +82,7 @@ mv /opt/dart-sass /opt/dart/bin
 EOF
 
 #### Final image ####
-FROM ruby:3.3.13-slim-trixie@sha256:4537e7d5459348e8f082e56599df520d9dab5f8de62eb86f0a2de4837c441e9f
+FROM ruby:3.3.13-slim-trixie@sha256:db3ad6dd68a886d51a187fb9bf486052f2976cdbe3b750169c25092aba1297fa
 
 ARG SITEBUILDER_VERSION
 
