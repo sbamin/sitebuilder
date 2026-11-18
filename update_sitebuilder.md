@@ -22,7 +22,7 @@ All versions live in version-controlled files. The [Renovate app](https://github
 | What | Where |
 |---|---|
 | sitebuilder image tag | `ARG SITEBUILDER_VERSION` in `Dockerfile` |
-| [hugo extended](https://github.com/gohugoio/hugo/releases), [dart-sass](https://github.com/sass/dart-sass/releases) | `ARG HUGO_VERSION`, `ARG DART_SASS_VERSION` in `Dockerfile` |
+| [hugo](https://github.com/gohugoio/hugo/releases), [dart-sass](https://github.com/sass/dart-sass/releases) | `ARG HUGO_VERSION`, `ARG DART_SASS_VERSION` in `Dockerfile` |
 | ruby and [go](https://go.dev/dl/) | `FROM ruby:...` and `FROM golang:...` lines (tag and digest) in `Dockerfile` |
 | jekyll gems | `Gemfile` and `Gemfile.lock` |
 | mkdocs, plugins, pagefind | `requirements.in` (top-level) and `requirements.txt` (pinned) |
