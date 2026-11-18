@@ -2,3 +2,4 @@
 - [Docker shared dir](docker-shared-dir.md) — bind mounts only from ~/Desktop/tmp
 - [CI ubuntu-latest -> 26](ci-ubuntu-latest-26.md) — runner migration from 2026-10-19; check on next release
 - [Confirm before force push](confirm-before-force-push.md) — always ask right before any force push, incl. tags
+- [Merge master via web UI](master-merge-via-web-ui.md) — branch protection; user merges PRs, no gh --admin

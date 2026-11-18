@@ -41,3 +41,19 @@
 - User: never force-push without a prompt right before it (saved as memory). Rebuild run 40052170692 on d9d73f0 in progress; tag move waits for user confirmation.
 - Rebuild run 40052170692 OK (revision d9d73f0, amd64+arm64, Trivy same 7 HIGH, 0 CRITICAL). New signed tag 1.5.11 at d9d73f0 made locally; user force-pushed it manually (prefers to do force pushes).
 - User: guard against MkDocs 2.0. Added mkdocs<2 to requirements.in, Renovate allowedVersions <2 for mkdocs, recompiled requirements.txt (no version change; mkdocs 1.6.1, material 9.7.7 already caps <2). Not committed.
+
+## 2026-11-18 - Merge Renovate security PRs and rebuild
+- User prompt: merge the security update PRs and rebuild.
+- Open PRs: #22 ruby digests, #23 golang 1.27.4, #24 hugo 0.170.0, #21 golang 1.27.3 digest (superseded by #23).
+- User: new version 1.5.12 (bump on dev, CHANGES_1.5.12.md, PR dev->master with buildimg).
+- Done: closed #21. gh merge of #22-#24 blocked by branch protection (1 review + signed commits); user merges in web UI.
+- Note: #19 (merged earlier) took GitPython 3.2.1 and mkdocs-material 9.8.0, which dropped mkdocs-rss-plugin from [recommended].
+- User temporarily allowed merge without review: merged #22, #23, #24; dev merged master; user: keep rss -> mkdocs-rss-plugin 1.20.0 in requirements.in (works with GitPython 3.2.1). Version 1.5.12, CHANGES_1.5.12.md. PR #25 dev->master "buildimg: security release 1.5.12".
+- User: check issue #16 (Renovate dashboard) -> chose to add its updates to 1.5.12. Ticked boxes; Renovate made #26-#31. Merged #26-#30; closed #31 (based on master, no rss/mkdocs<2), ran uv --upgrade on dev instead. github-pages 233 and lock file maintenance failed in Renovate (artifact update).
+- User approved docker: bundle lock --update in ruby:3.3.13-trixie -> github-pages 233, rubyzip 3.7.0 (alert 67 fixed). Local arm64 build of sitebuilder:1.5.12 running.
+- Local build failed: hugo 0.170.0 removed hugo_extended_withdeploy archives (PR #24 CI build was skipped). Dockerfile now uses hugo_withdeploy_*. Rebuilding.
+- Local arm64 build OK (890MB), smoke checks OK (rss, hugo dartsass, jekyll, rubyzip 3.7.0, pip check). Pushed dev 624245d; PR #25 checks pass. Merge of #25 blocked by permission classifier; waiting for user.
+- User merged #25 (d22be40). CI run 44340055677 build-and-push running.
+- CI run 44340055677 OK: sbamin/sitebuilder:1.5.12 + latest, amd64+arm64, revision d22be40. Trivy HIGH 1 (pip vendored setuptools 70.3.0), CRITICAL 0. CHANGES updated, dev pushed. Tag/release waits for user.
+- User: tag and release. Signed tag 1.5.12 at d22be40 pushed; GitHub release 1.5.12 created.
+- User restored protection: classic branch protection removed; ruleset protect_master active (1 review, code owner review, signed commits, thread resolution, no deletion, no force push). Memory updated.
