@@ -2,7 +2,7 @@
 
 This file records the changes to the image build in version 1.5.12. It is a security release from Renovate pull requests.
 
-Status: local arm64 build OK (890MB). Checksums OK; pip check OK; non-root; hugo dartsass, mkdocs with rss plugin, jekyll with jekyll-feed, ruby and python HTTPS smoke tests OK. CI build and Trivy scan pending.
+Status: local arm64 build OK (890MB). Checksums OK; pip check OK; non-root; hugo dartsass, mkdocs with rss plugin, jekyll with jekyll-feed, ruby and python HTTPS smoke tests OK. CI built and pushed amd64 and arm64 (run 44340055677, revision d22be40). Trivy: 0 critical, 1 high (see C).
 
 Note: mkdocs-material 9.8.1 prints that Material for MkDocs reaches end of life on 2027-05-05 (Zensical is the successor). Set `NO_MKDOCS_2_WARNING=1` to hide the notice.
 
@@ -24,4 +24,5 @@ Note: mkdocs-material 9.8.1 prints that Material for MkDocs reaches end of life 
 
 ## C. Known open alerts
 
-- **pip vendored packages**: see CHANGES_1.5.11.md. Check again after the CI Trivy scan.
+- **setuptools 70.3.0** (CVE-2025-47273, fixed in 78.1.1) is the copy that pip bundles in `pip/_vendor`, see CHANGES_1.5.11.md. It runs only when you run `pip` in the image. This is the only Trivy finding.
+- Fixed since 1.5.11: GitPython (alert 107), rubyzip (alert 67), hugo Go CVE-2026-111943, and pip vendored urllib3 and msgpack.
