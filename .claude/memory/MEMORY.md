@@ -1,3 +1,4 @@
 - [No docker without asking](no-docker-without-asking.md) — ask before any docker or test command in sitebuilder
 - [Docker shared dir](docker-shared-dir.md) — bind mounts only from ~/Desktop/tmp
 - [CI ubuntu-latest -> 26](ci-ubuntu-latest-26.md) — runner migration from 2026-10-19; check on next release
+- [Confirm before force push](confirm-before-force-push.md) — always ask right before any force push, incl. tags

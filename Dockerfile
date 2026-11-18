@@ -6,7 +6,7 @@
 #### Versions: edit only this block for a new release ####
 ## Base images (ruby, golang) are pinned in FROM lines below.
 ## ruby should be compliant with github-pages, https://pages.github.com/versions/
-ARG SITEBUILDER_VERSION=1.5.11
+ARG SITEBUILDER_VERSION=1.5.12
 # renovate: datasource=github-releases depName=gohugoio/hugo
 ARG HUGO_VERSION=0.170.1
 # renovate: datasource=github-releases depName=sass/dart-sass
@@ -49,7 +49,7 @@ python3 -m venv /opt/venv
 ln -s "$(echo /opt/venv/lib/python3*/site-packages/pagefind_bin_extended/pagefind_extended)" /opt/venv/bin/pagefind
 EOF
 
-## hugo extended and dart-sass, checksum verified
+## hugo (with deploy) and dart-sass, checksum verified
 ## optional secret github_token avoids GitHub API rate limit (CI)
 WORKDIR /tmp/dl
 RUN --mount=type=secret,id=github_token <<EOF
@@ -60,7 +60,7 @@ case "${TARGETARCH}" in
 esac
 
 hugo_url="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}"
-hugo_tgz="hugo_extended_withdeploy_${HUGO_VERSION}_linux-${TARGETARCH}.tar.gz"
+hugo_tgz="hugo_withdeploy_${HUGO_VERSION}_linux-${TARGETARCH}.tar.gz"
 curl -fsSLO "${hugo_url}/${hugo_tgz}"
 curl -fsSL "${hugo_url}/hugo_${HUGO_VERSION}_checksums.txt" | grep " ${hugo_tgz}\$" | sha256sum -c -
 mkdir -p /opt/hugo

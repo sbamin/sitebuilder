@@ -22,7 +22,7 @@ All versions live in version-controlled files. The [Renovate app](https://github
 | What | Where |
 |---|---|
 | sitebuilder image tag | `ARG SITEBUILDER_VERSION` in `Dockerfile` |
-| [hugo extended](https://github.com/gohugoio/hugo/releases), [dart-sass](https://github.com/sass/dart-sass/releases) | `ARG HUGO_VERSION`, `ARG DART_SASS_VERSION` in `Dockerfile` |
+| [hugo](https://github.com/gohugoio/hugo/releases), [dart-sass](https://github.com/sass/dart-sass/releases) | `ARG HUGO_VERSION`, `ARG DART_SASS_VERSION` in `Dockerfile` |
 | ruby and [go](https://go.dev/dl/) | `FROM ruby:...` and `FROM golang:...` lines (tag and digest) in `Dockerfile` |
 | jekyll gems | `Gemfile` and `Gemfile.lock` |
 | mkdocs, plugins, pagefind | `requirements.in` (top-level) and `requirements.txt` (pinned) |
@@ -87,7 +87,7 @@ docker run --platform linux/amd64 --rm sbamin/sitebuilder sitebuilder-versions
 ### Update github releases
 
 ```sh
-git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.11.md
+git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.12.md
 
 ## write a multiline git commit message
 ## -s requires a valid gpg key for signing a message
