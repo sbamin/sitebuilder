@@ -10,7 +10,7 @@ ARG SITEBUILDER_VERSION=1.5.11
 # renovate: datasource=github-releases depName=gohugoio/hugo
 ARG HUGO_VERSION=0.170.1
 # renovate: datasource=github-releases depName=sass/dart-sass
-ARG DART_SASS_VERSION=1.106.1
+ARG DART_SASS_VERSION=1.108.2
 
 #### Go toolchain (for hugo modules) ####
 ## https://go.dev/dl/
