@@ -17,7 +17,7 @@ ARG DART_SASS_VERSION=1.106.1
 FROM golang:1.27.4-trixie@sha256:f18c3d73a184fb0582828510722e723b63a93f7188d11dd223d9be6f6880e65d AS go
 
 #### Builder: gems, python venv, hugo, dart-sass ####
-FROM ruby:3.3.13-trixie@sha256:1a23507b0dce53a9c8fde7d8777390d647738495e4badb7ef5dc84f51ec5304b AS builder
+FROM ruby:3.3.13-trixie@sha256:fb47256a33515bb6a0d067529ff50042cb5a99c6675e1417c1d09e70dd13b439 AS builder
 
 ARG TARGETARCH
 ARG HUGO_VERSION
