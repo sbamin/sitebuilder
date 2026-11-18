@@ -8,7 +8,7 @@
 ## ruby should be compliant with github-pages, https://pages.github.com/versions/
 ARG SITEBUILDER_VERSION=1.5.11
 # renovate: datasource=github-releases depName=gohugoio/hugo
-ARG HUGO_VERSION=0.170.0
+ARG HUGO_VERSION=0.170.1
 # renovate: datasource=github-releases depName=sass/dart-sass
 ARG DART_SASS_VERSION=1.106.1
 
