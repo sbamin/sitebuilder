@@ -14,7 +14,7 @@ ARG DART_SASS_VERSION=1.106.1
 
 #### Go toolchain (for hugo modules) ####
 ## https://go.dev/dl/
-FROM golang:1.27.4-trixie@sha256:b54b2639de8c1bfe538ec5ffc45f29b1932235ac5f6d63c059853646677112d9 AS go
+FROM golang:1.27.4-trixie@sha256:f18c3d73a184fb0582828510722e723b63a93f7188d11dd223d9be6f6880e65d AS go
 
 #### Builder: gems, python venv, hugo, dart-sass ####
 FROM ruby:3.3.13-trixie@sha256:1a23507b0dce53a9c8fde7d8777390d647738495e4badb7ef5dc84f51ec5304b AS builder
