@@ -6,7 +6,7 @@
 #### Versions: edit only this block for a new release ####
 ## Base images (ruby, golang) are pinned in FROM lines below.
 ## ruby should be compliant with github-pages, https://pages.github.com/versions/
-ARG SITEBUILDER_VERSION=1.5.11
+ARG SITEBUILDER_VERSION=1.5.12
 # renovate: datasource=github-releases depName=gohugoio/hugo
 ARG HUGO_VERSION=0.170.0
 # renovate: datasource=github-releases depName=sass/dart-sass

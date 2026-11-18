@@ -87,7 +87,7 @@ docker run --platform linux/amd64 --rm sbamin/sitebuilder sitebuilder-versions
 ### Update github releases
 
 ```sh
-git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.11.md
+git add Dockerfile Gemfile Gemfile.lock requirements.in requirements.txt sitebuilder-versions .dockerignore renovate.json .github/workflows/docker_build.yml update_sitebuilder.md README.md CHANGES_1.5.12.md
 
 ## write a multiline git commit message
 ## -s requires a valid gpg key for signing a message

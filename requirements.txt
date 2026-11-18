@@ -6,6 +6,8 @@ babel==2.18.0
     #   mkdocs-material
 backrefs==8.1
     # via mkdocs-material
+cachecontrol==0.15.0
+    # via mkdocs-rss-plugin
 cairocffi==1.7.1
     # via cairosvg
 cairosvg==2.9.1
@@ -31,6 +33,8 @@ cssselect2==0.10.1
     # via cairosvg
 defusedxml==0.7.1
     # via cairosvg
+filelock==4.2.12
+    # via cachecontrol
 ghp-import==2.1.0
     # via
     #   mkdocs
@@ -42,6 +46,7 @@ gitpython==3.2.1
     #   mkdocs-git-committers-plugin-2
     #   mkdocs-git-revision-date-localized-plugin
     #   mkdocs-material
+    #   mkdocs-rss-plugin
 griffelib==2.4.1
     # via mkdocstrings-python
 hjson==3.1.0
@@ -128,6 +133,8 @@ mkdocs-minify-plugin==0.8.0
     #   mkdocs-material
 mkdocs-redirects==1.2.3
     # via -r requirements.in
+mkdocs-rss-plugin==1.20.0
+    # via -r requirements.in
 mkdocstrings==1.0.8
     # via
     #   -r requirements.in
@@ -139,6 +146,8 @@ mkdocstrings-shell==1.0.5
     # via -r requirements.in
 mkquartodocs==0.7.0
     # via -r requirements.in
+msgpack==1.2.4
+    # via cachecontrol
 packaging==26.3
     # via
     #   mkdocs
@@ -197,9 +206,11 @@ pyyaml-env-tag==1.1
     #   properdocs
 requests==2.34.2
     # via
+    #   cachecontrol
     #   mkdocs-git-committers-plugin-2
     #   mkdocs-macros-plugin
     #   mkdocs-material
+    #   mkdocs-rss-plugin
 selectolax==1.0.2
     # via mkdocs-glightbox
 shellman==1.0.3
@@ -219,6 +230,7 @@ tinycss2==1.5.1
 tzdata==2025.3
     # via
     #   mkdocs-git-revision-date-localized-plugin
+    #   mkdocs-rss-plugin
     #   python-dateutil
 urllib3==2.8.0
     # via requests

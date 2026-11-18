@@ -5,6 +5,7 @@ mkdocs-git-revision-date-localized-plugin
 mkdocs-git-authors-plugin
 mkdocs-minify-plugin
 mkdocs-redirects
+mkdocs-rss-plugin
 mkdocs-macros-plugin
 mkdocs-glightbox
 mkdocstrings
